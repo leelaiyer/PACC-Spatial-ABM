@@ -136,7 +136,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
         int x = 30, y = 30;
         FinalModelTumor model = new FinalModelTumor(x, y, "PopOut.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow("Model Tumor", 750, 750, x, y);
-        model.Setup( 500, 5, 0.5);
+        model.Setup( 200, 5, 0.5);
         while (!vis.IsClosed()) {
             vis.TickPause(0);
             model.StepCells();
@@ -220,6 +220,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                     event2 = e;
                 }
             }
+
             boolean logistic = event2 == 0;
             boolean obligate = event2  == 1;
             boolean facultative = event2 == 2;
@@ -228,18 +229,37 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
             System.out.println(event2);
             if ((cell.type == ANEUPLOID) && (cell.CanDivide(ANEU_DIV_BIAS, ANEU_INHIB_WEIGHT))) {
                 if(logistic){
+                    System.out.println("logistic");
                     cell.Div();
                 } else if((obligate)||(facultative)){
+                    double x = cell.Xpt();
+                    double y = cell.Ypt();
                     cell.Die();
+                    double x1 = cell.Xpt();
+                    double y1 = cell.Ypt();
+                    System.out.println("x: " + x + ", y: " + y + ", x1: " + x1 + ", y1: " + y1);
+
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(PACC);
                 } else if(deathDueToDrug) {
                     cell.Die();
                 }
             } else if ((cell.type == PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(depolyploidize){
+                    System.out.println("depolyploidize");
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ANEUPLOID);
-                    NewAgentPT(cell.Xpt()+0.25, cell.Ypt()).Init(ANEUPLOID);
+                    if(cell.Xpt()+0.5 < xDim-0.5){
+                        NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ANEUPLOID);
+                    } else if (cell.Ypt()+0.5 < yDim - 0.5){
+                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ANEUPLOID);
+                    } else if (cell.Xpt()-0.5 > xDim +0.5){
+                        NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ANEUPLOID);
+                    } else if(cell.Ypt() -0.5 > yDim +0.5) {
+                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ANEUPLOID);
+                    } else {
+
+                    }
+
                 }
             }
         }
