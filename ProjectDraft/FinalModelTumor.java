@@ -56,16 +56,21 @@ class Cell1 extends SphericalAgent2D<Cell1, FinalModelTumor>{
     }
 
     public void Mutation() {
-        boolean mutation = G.rn.Bool();
-        if(!mutation) {
+        boolean mutated = G.rn.Bool();
+        if(!mutated) {
             return;
-        } else if(mutation) {
-            double favorability = G.rn.Double(5);
+        } else if(mutated) {
+            double favorability = G.gaussian.Sample(0.5, 1, new Rand());
+            if(favorability < 0.7) {
+                mutated = false;
+            } else if(favorability > 0.7) {
+                mutated = true;
+                double resistanceAdded = G.rn.Double(1);
+                G.totalResistance = G.totalResistance + resistanceAdded;
+            }
         }
     }
 }
-
-
 
 public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
@@ -82,13 +87,12 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
     double ANEU_INHIB_WEIGHT = 0.05;
     public static int PACCPop = 0;
     public static int aneuPop = 0;
-    public static int PACCPopFinal = 0;
-    public static int aneuPopFinal = 0;
     ArrayList<Cell1> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
     Rand rn = new Rand(0);
-    Gaussian gn = new Gaussian();
+    Gaussian gaussian = new Gaussian();
+    static double totalResistance = 0;
     FileIO out;
 
     public FinalModelTumor(int x, int y, String outFileName) {
@@ -98,10 +102,6 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
     }
 
 
-    public static double to2N(double PACCPop) {
-        double to2N = 0.2 * PACCPop;
-        return to2N;
-    }
     public static double logisticGrowth(double aneuPop, double PACCPop) {
         double logistic = 0.6*aneuPop*(10000 - aneuPop - 2*PACCPop)/10000;
         if(logistic < 0){
@@ -124,6 +124,11 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
     public static double fromPACC(double PACCPop) {
         double fromPACC = 0.4 * PACCPop;
         return fromPACC;
+    }
+
+    public static double deathDueToDrug(double drugDose, double aneuPop, double totalResistance) {
+        double death = aneuPop * (drugDose/(1 + totalResistance));
+        return death;
     }
 
     public static void main(String[] args) {
@@ -179,8 +184,8 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
         for (Cell1 cell : this) {
             cell.CalcMove();
+            cell.Mutation();
         }
-
 
         for (Cell1 cell : this) {
             cell.Move();
@@ -206,6 +211,8 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                 if(event < eventPercentagesSorted[f]) {
                     event2 = eventPercentagesSorted[f];
                     break;
+                } else if(event2 > eventPercentagesSorted[3]){
+                    event2 = 0;
                 }
             }
             for(int e = 0; e < eventPercentages.length; e++) {
@@ -217,6 +224,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
             boolean obligate = event2  == 1;
             boolean facultative = event2 == 2;
             boolean depolyploidize = event2 == 3;
+            boolean deathDueToDrug = event2 == 4;
             System.out.println(event2);
             if ((cell.type == ANEUPLOID) && (cell.CanDivide(ANEU_DIV_BIAS, ANEU_INHIB_WEIGHT))) {
                 if(logistic){
@@ -224,6 +232,8 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                 } else if((obligate)||(facultative)){
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(PACC);
+                } else if(deathDueToDrug) {
+                    cell.Die();
                 }
             } else if ((cell.type == PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(depolyploidize){
