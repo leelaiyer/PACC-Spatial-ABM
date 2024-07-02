@@ -224,16 +224,12 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                 } else if((obligate)||(facultative)){
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(PACC);
-                } else {
-                    break;
                 }
             } else if ((cell.type == PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(depolyploidize){
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ANEUPLOID);
                     NewAgentPT(cell.Xpt()+0.25, cell.Ypt()).Init(ANEUPLOID);
-                } else {
-                    break;
                 }
             }
         }

@@ -10,7 +10,7 @@ import java.lang.Math;
 import java.util.ArrayList;
 import static HAL.Util.RGB256;
 
-class Cell extends SphericalAgent2D<Cell1, FirstModelTumor>{
+class Cell extends SphericalAgent2D<Cell, FirstModelTumor>{
     int type;
     double forceSum;
     double resistance;
@@ -23,7 +23,7 @@ class Cell extends SphericalAgent2D<Cell1, FirstModelTumor>{
         }
     }
 
-    double ForceCalc(double overlap, Cell1 other){
+    double ForceCalc(double overlap, Cell other){
         if(overlap < 0) {
             return 0;
         }
@@ -53,7 +53,7 @@ class Cell extends SphericalAgent2D<Cell1, FirstModelTumor>{
     }
 }
 
-public class FirstModelTumor extends AgentGrid2D<Cell1> {
+public class FirstModelTumor extends AgentGrid2D<Cell> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int PACC = RGB256(60, 179, 113);
@@ -70,7 +70,7 @@ public class FirstModelTumor extends AgentGrid2D<Cell1> {
     public static int aneuPop = 0;
     public static int PACCPopFinal = 0;
     public static int aneuPopFinal = 0;
-    ArrayList<Cell1> neighborList = new ArrayList<>();
+    ArrayList<Cell> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
     Rand rn = new Rand(0);
@@ -79,11 +79,11 @@ public class FirstModelTumor extends AgentGrid2D<Cell1> {
 
     public FirstModelTumor(int x, int y) {
 
-        super(x, y, Cell1.class, true, true);
+        super(x, y, Cell.class, true, true);
     }
 
     public FirstModelTumor(int x, int y, String outFileName) {
-        super(x, y, Cell1.class, true, true);
+        super(x, y, Cell.class, true, true);
         out = new FileIO(outFileName, "w");
     }
 
@@ -146,10 +146,10 @@ public class FirstModelTumor extends AgentGrid2D<Cell1> {
 
     public void DrawCells(OpenGL2DWindow vis) {
         vis.Clear(WHITE);
-        for (Cell1 cell : this) {
+        for (Cell cell : this) {
             vis.Circle(cell.Xpt(),cell.Ypt(),cell.radius,CYTOPLASM);
         }
-        for (Cell1 cell : this) {
+        for (Cell cell : this) {
             vis.Circle(cell.Xpt(), cell.Ypt(), cell.radius / 3, cell.type);
         }
         vis.Update();
@@ -158,7 +158,7 @@ public class FirstModelTumor extends AgentGrid2D<Cell1> {
     public void StepCells() {
         PACCPop = 0;
         aneuPop = 0;
-        for (Cell1 cell : this) {
+        for (Cell cell : this) {
             if (cell.type == PACC) {
                 PACCPop++;
             } else {
@@ -169,11 +169,11 @@ public class FirstModelTumor extends AgentGrid2D<Cell1> {
         PACCPopFinal = (PACCPop * changeInPACCPop(aneuPop, PACCPop, 5)) + PACCPop;
         aneuPopFinal = aneuPop * changeIn2NPop(aneuPop, PACCPop, 5) + aneuPop;
 
-        for (Cell1 cell : this) {
+        for (Cell cell : this) {
             cell.CalcMove();
         }
 
-        for (Cell1 cell : this) {
+        for (Cell cell : this) {
             cell.Move();
             boolean morePACC = PACCPop > PACCPopFinal;
             boolean lessPACC = PACCPop < PACCPopFinal;
@@ -209,7 +209,7 @@ public class FirstModelTumor extends AgentGrid2D<Cell1> {
 
     public void RecordOut (FileIO writeHere){
         int ctPACC = 0, ctAneu = 0;
-        for (Cell1 cell : this) {
+        for (Cell cell : this) {
             if (cell.type == PACC) {
                 ctPACC++;
             } else {
