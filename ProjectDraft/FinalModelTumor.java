@@ -103,7 +103,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
 
     public static double logisticGrowth(double aneuPop, double PACCPop) {
-        double logistic = 0.6*aneuPop*(10000 - aneuPop - 2*PACCPop)/10000;
+        double logistic = 0.6*aneuPop*(10000 - aneuPop - PACCPop)/10000;
         if(logistic < 0){
             return 0;
         } else {
@@ -189,7 +189,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
         for (Cell1 cell : this) {
             cell.Move();
-            double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop)};
+           double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop)};
             double sum = 0;
             for(int i = 0; i < eventProbabilities.length; i++){
                 sum = sum + eventProbabilities[i];
@@ -198,54 +198,28 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
             for(int w = 0; w < eventPercentages.length; w++) {
                 eventPercentages[w] = (eventProbabilities[w]/sum);
             }
-            double[] eventPercentagesSorted = new double[eventPercentages.length];
-            for(int r = 0; r < eventPercentagesSorted.length; r++) {
-                eventPercentagesSorted[r] = eventPercentages[r];
-            }
-            Arrays.sort(eventPercentagesSorted);
-            double event = rn.Double(1);
-            System.out.println("Percentages: " + Arrays.toString(eventPercentages));
-            System.out.println("Random: " + event);
-            double event2 = 0;
-            for(int f = 0; f < eventPercentagesSorted.length; f++) {
-                if(event < eventPercentagesSorted[f]) {
-                    event2 = eventPercentagesSorted[f];
-                    break;
-                } else if(event2 > eventPercentagesSorted[3]){
-                    event2 = 0;
-                }
-            }
-            for(int e = 0; e < eventPercentages.length; e++) {
-                if(event2 == eventPercentages[e]) {
-                    event2 = e;
-                }
-            }
-
-            boolean logistic = event2 == 0;
-            boolean obligate = event2  == 1;
-            boolean facultative = event2 == 2;
-            boolean depolyploidize = event2 == 3;
-            boolean deathDueToDrug = event2 == 4;
-            System.out.println(event2);
+            double r = rn.Double(1);
             if ((cell.type == ANEUPLOID) && (cell.CanDivide(ANEU_DIV_BIAS, ANEU_INHIB_WEIGHT))) {
-                if(logistic){
-                    System.out.println("logistic");
-                    cell.Div();
-                } else if((obligate)||(facultative)){
-                    double x = cell.Xpt();
-                    double y = cell.Ypt();
+                 if((r < eventPercentages[1])||(r < eventPercentages[2])){
                     cell.Die();
-                    double x1 = cell.Xpt();
-                    double y1 = cell.Ypt();
-                    System.out.println("x: " + x + ", y: " + y + ", x1: " + x1 + ", y1: " + y1);
-
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(PACC);
-                } else if(deathDueToDrug) {
-                    cell.Die();
+                } else if(r < eventPercentages[0]){
+                     if(cell.Xpt()+0.5 < xDim-0.5){
+                         NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ANEUPLOID);
+                     } else if (cell.Ypt()+0.5 < yDim - 0.5){
+                         NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ANEUPLOID);
+                     } else if (cell.Xpt()-0.5 > xDim +0.5){
+                         NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ANEUPLOID);
+                     } else if(cell.Ypt() -0.5 > yDim +0.5) {
+                         NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ANEUPLOID);
+                     } else {
+
+                     }
+                 }  else {
+
                 }
             } else if ((cell.type == PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
-                if(depolyploidize){
-                    System.out.println("depolyploidize");
+                if(r < eventPercentages[3]) {
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ANEUPLOID);
                     if(cell.Xpt()+0.5 < xDim-0.5){
