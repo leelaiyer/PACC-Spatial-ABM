@@ -46,8 +46,10 @@ class Cell1 extends SphericalAgent2D<Cell1, FinalModelTumor>{
     }
 
     public void Div() {
-        if ((type == FinalModelTumor.PACC && CanDivide(G.PACC_DIV_BIAS, G.PACC_INHIB_WEIGHT)) || (type == FinalModelTumor.ANEUPLOID && CanDivide(G.ANEU_DIV_BIAS, G.ANEU_INHIB_WEIGHT))) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(type);
+        if (type == FinalModelTumor.PACC) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalModelTumor.PACC);
+        } else if(type == FinalModelTumor.ANEUPLOID) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalModelTumor.ANEUPLOID);
         }
     }
 
@@ -60,10 +62,10 @@ class Cell1 extends SphericalAgent2D<Cell1, FinalModelTumor>{
         if(!mutated) {
             return;
         } else if(mutated) {
-            double favorability = G.gaussian.Sample(0.5, 1, new Rand());
-            if(favorability < 0.7) {
-                mutated = false;
-            } else if(favorability > 0.7) {
+            double favorability = G.rn.Double(1);
+            if(favorability < 0.9) {
+                return;
+            } else if(favorability > 0.9) {
                 mutated = true;
                 double resistanceAdded = G.rn.Double(1);
                 G.totalResistance = G.totalResistance + resistanceAdded;
@@ -80,7 +82,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
     static int CYTOPLASM = RGB256(255,228,225);
     double RADIUS = 0.5;
     double FORCE_SCALER = 0.25;
-    double FRICTION = 0.5;
+    double FRICTION = 0.6;
     double PACC_DIV_BIAS = 0.01;
     double ANEU_DIV_BIAS = 0.02;
     double PACC_INHIB_WEIGHT = 0.02;
@@ -136,10 +138,10 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
         int x = 30, y = 30;
         FinalModelTumor model = new FinalModelTumor(x, y, "PopOut.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow("Model Tumor", 750, 750, x, y);
-        model.Setup( 200, 5, 0.5);
+        model.Setup( 200, 5, .1);
         while (!vis.IsClosed()) {
-            vis.TickPause(0);
-            model.StepCells();
+            vis.TickPause(10);
+            model.StepCells(vis);
             model.Draw(vis);
         }
         if (model.out != null) {
@@ -155,11 +157,6 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
         }
     }
 
-    public void applyDrug(OpenGL2DWindow vis) {
-        for(Cell1 cell : this){
-            CYTOPLASM = RGB256(255,150,150);;
-        }
-    }
     public void Draw(OpenGL2DWindow vis) {
         vis.Clear(WHITE);
         for (Cell1 cell : this) {
@@ -171,7 +168,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
         vis.Update();
     }
 
-    public void StepCells() {
+    public void StepCells(OpenGL2DWindow vis) {
         PACCPop = 0;
         aneuPop = 0;
         for (Cell1 cell : this) {
@@ -181,15 +178,18 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                 aneuPop++;
             }
         }
+        System.out.println("PACCPop: " + PACCPop);
+        System.out.println("aneuPop: " + aneuPop);
+        System.out.println(" ");
 
         for (Cell1 cell : this) {
             cell.CalcMove();
-            cell.Mutation();
         }
 
         for (Cell1 cell : this) {
             cell.Move();
-           double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop)};
+            cell.Mutation();
+           double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(175, aneuPop, totalResistance)};
             double sum = 0;
             for(int i = 0; i < eventProbabilities.length; i++){
                 sum = sum + eventProbabilities[i];
@@ -199,23 +199,16 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                 eventPercentages[w] = (eventProbabilities[w]/sum);
             }
             double r = rn.Double(1);
+
             if ((cell.type == ANEUPLOID) && (cell.CanDivide(ANEU_DIV_BIAS, ANEU_INHIB_WEIGHT))) {
-                 if((r < eventPercentages[1])||(r < eventPercentages[2])){
+                if (r < eventPercentages[4]) {
+                    cell.Die();
+                } else if((r < eventPercentages[1])||(r < eventPercentages[2])){
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(PACC);
                 } else if(r < eventPercentages[0]){
-                     if(cell.Xpt()+0.5 < xDim-0.5){
-                         NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ANEUPLOID);
-                     } else if (cell.Ypt()+0.5 < yDim - 0.5){
-                         NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ANEUPLOID);
-                     } else if (cell.Xpt()-0.5 > xDim +0.5){
-                         NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ANEUPLOID);
-                     } else if(cell.Ypt() -0.5 > yDim +0.5) {
-                         NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ANEUPLOID);
-                     } else {
-
-                     }
-                 }  else {
+                    cell.Div();
+                } else{
 
                 }
             } else if ((cell.type == PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
