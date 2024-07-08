@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static HAL.Util.*;
 
-class Cell1 extends SphericalAgent2D<Cell2, FinalModelTumor>{
+class Cell2 extends SphericalAgent2D<Cell2, TumorWithETandSGM>{
     int type;
     double forceSum;
     double resistance;
@@ -45,10 +45,10 @@ class Cell1 extends SphericalAgent2D<Cell2, FinalModelTumor>{
     }
 
     public void Div() {
-        if (type == FinalModelTumor.PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalModelTumor.PACC);
-        } else if(type == FinalModelTumor.ANEUPLOID) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalModelTumor.ANEUPLOID);
+        if (type == TumorWithETandSGM.PACC) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithETandSGM.PACC);
+        } else if(type == TumorWithETandSGM.ANEUPLOID) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithETandSGM.ANEUPLOID);
         }
     }
 
@@ -72,7 +72,7 @@ class Cell1 extends SphericalAgent2D<Cell2, FinalModelTumor>{
     }
 }
 
-public class FinalModelTumor extends AgentGrid2D<Cell2> {
+public class TumorWithETandSGM extends AgentGrid2D<Cell2> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int PACC = RGB256(60, 179, 113);
@@ -95,7 +95,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
     static double totalResistance = 0;
     FileIO out;
 
-    public FinalModelTumor(int x, int y, String outFileName) {
+    public TumorWithETandSGM(int x, int y, String outFileName) {
         super(x, y, Cell2.class, true, true);
 
         out = new FileIO(outFileName, "w");
@@ -134,8 +134,8 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
     public static void main(String[] args) {
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
-        FinalModelTumor model = new FinalModelTumor(x, y, "PopOut.csv");
-        OpenGL2DWindow vis = new OpenGL2DWindow("Model Tumor", 750, 750, x, y);
+        TumorWithETandSGM model = new TumorWithETandSGM(x, y, "PopOut.csv");
+        OpenGL2DWindow vis = new OpenGL2DWindow("Tumor With ET and SGM", 750, 750, x, y);
         model.Setup( 200, 5, .1);
         while (!vis.IsClosed()) {
             vis.TickPause(10);
@@ -187,7 +187,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
         for (Cell2 cell : this) {
             cell.Move();
             cell.Mutation();
-           double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(175, aneuPop, totalResistance)};
+            double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(175, aneuPop, totalResistance)};
             double sum = 0;
             for(int i = 0; i < eventProbabilities.length; i++){
                 sum = sum + eventProbabilities[i];
