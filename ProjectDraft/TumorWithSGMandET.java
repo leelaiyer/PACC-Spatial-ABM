@@ -8,16 +8,18 @@ import HAL.Tools.Internal.Gaussian;
 import HAL.Rand;
 
 import java.lang.Math;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import static HAL.Util.*;
 
 class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
     int type;
-    double forceSum;
     double resistance;
-    public void Init(int color) {
+    double forceSum;
+    public void Init(int color, double resistance) {
         this.type = color;
+        this.resistance = resistance + G.totalResistance;
         if (type == TumorWithSGMandET.SGM_PACC) {
             this.radius = 0.5;
         } else if (type == TumorWithSGMandET.SGM_ANEU) {
@@ -51,13 +53,13 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
 
     public void Div() {
         if (type == TumorWithSGMandET.SGM_PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.SGM_PACC);
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.SGM_PACC, resistance);
         } else if(type == TumorWithSGMandET.SGM_ANEU) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.SGM_ANEU);
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.SGM_ANEU, resistance);
         } else if(type == TumorWithSGMandET.ET_PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.ET_PACC);
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.ET_PACC, resistance);
         } else if(type == TumorWithSGMandET.ET_ANEU) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.ET_ANEU);
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(TumorWithSGMandET.ET_ANEU, resistance);
         }
     }
 
@@ -65,7 +67,9 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
         Dispose();
     }
 
-    public void Mutation() {
+
+
+    public void MutationET() {
         boolean mutated = G.rn.Bool();
         if(!mutated) {
 
@@ -75,8 +79,18 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
 
             } else if(favorability > 0.9) {
                 double resistanceAdded = G.rn.Double(1);
-                G.totalResistance = G.totalResistance + resistanceAdded;
+                resistance = G.totalResistance + resistanceAdded;
             }
+        }
+    }
+
+    public void MutationSGM() {
+        int [] neighborhood = CircleHood(false,radius);
+        int options = MapEmptyHood(neighborhood);
+        if (options>0){
+            MutationET();
+        } else {
+
         }
     }
 }
@@ -102,10 +116,11 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
     public static int ET_AneuPop = 0;
     public static int SGM_PACCPop = 0;
     public static int SGM_AneuPop = 0;
+    public static int drugDose = 0;
     ArrayList<Cell2> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
-    Rand rn = new Rand();
+    Rand rn = new Rand(System.nanoTime());
     Gaussian gaussian = new Gaussian();
     static double totalResistance = 0;
     FileIO out;
@@ -130,7 +145,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
     }
 
     public static double facultativeToPACC(double aneuPop, double drugResistance) {
-        double facultative = 0.7 * aneuPop * (1/(1+drugResistance));
+        double facultative = 0.7 * aneuPop * (1/(100+drugResistance));
         return facultative;
     }
 
@@ -140,7 +155,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
     }
 
     public static double deathDueToDrug(double drugDose, double aneuPop, double totalResistance) {
-        double death = aneuPop * (drugDose/(1 + totalResistance));
+        double death = aneuPop * (drugDose/(100 + totalResistance));
         return death;
     }
 
@@ -150,10 +165,12 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
         TumorWithSGMandET model = new TumorWithSGMandET(x, y, "PopOut.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow("Tumor With SGM and ET", 750, 750, x, y);
         model.Setup( 200, 5);
-        while (!vis.IsClosed()) {
+        int i = 0;
+        while ((i<10000)&&(!vis.IsClosed())) {
             vis.TickPause(10);
             model.Draw(vis);
             model.StepCells(vis);
+            i++;
         }
         if (model.out != null) {
             model.out.Close();
@@ -166,13 +183,13 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
             double cellType = rn.Double(1);
             rn.RandomPointInCircle(initRadius, divCoordStorage);
             if(cellType < 0.1) {
-                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(ET_PACC);
+                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(ET_PACC, totalResistance);
             } else if(cellType < 0.2) {
-                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(SGM_PACC);
+                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(SGM_PACC, totalResistance);
             } else if(cellType < 0.6) {
-                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(SGM_ANEU);
+                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(SGM_ANEU, totalResistance);
             } else {
-                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(ET_ANEU);
+                NewAgentPT(divCoordStorage[0] + xDim / 2.0, divCoordStorage[1] + yDim / 2.0).Init(ET_ANEU, totalResistance);
             }
         }
     }
@@ -218,7 +235,6 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
         }
         for (Cell2 cell : this) {
             cell.Move();
-            cell.Mutation();
             double[] eventProbabilities = {logisticGrowth(totalAneuPop, totalPACCPop),
                     obligateToPACC(totalAneuPop), facultativeToPACC(totalAneuPop, totalResistance),
                     fromPACC(totalPACCPop), deathDueToDrug(0, totalAneuPop, totalResistance)};
@@ -236,24 +252,26 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
                     cell.Die();
                 } else if((r < eventPercentages[1])||(r < eventPercentages[2])){
                     cell.Die();
-                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_PACC);
+                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_PACC, totalResistance);
                 } else if(r < eventPercentages[0]){
+                    cell.MutationET();
                     cell.Div();
                 } else{
 
                 }
             } else if ((cell.type == ET_PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(r < eventPercentages[3]) {
+                    cell.MutationET();
                     cell.Die();
-                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_ANEU);
+                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_ANEU, totalResistance);
                     if(cell.Xpt()+0.5 < xDim-0.5){
-                        NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ET_ANEU);
+                        NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ET_ANEU, totalResistance);
                     } else if (cell.Ypt()+0.5 < yDim - 0.5){
-                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ET_ANEU);
+                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ET_ANEU, totalResistance);
                     } else if (cell.Xpt()-0.5 > xDim +0.5){
-                        NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ET_ANEU);
+                        NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ET_ANEU, totalResistance);
                     } else if(cell.Ypt() -0.5 > yDim +0.5) {
-                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ET_ANEU);
+                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ET_ANEU, totalResistance);
                     } else {
 
                     }
@@ -263,7 +281,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
                     cell.Die();
                 } else if((r < eventPercentages[1])||(r < eventPercentages[2])){
                     cell.Die();
-                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_PACC);
+                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_PACC, totalResistance);
                 } else if(r < eventPercentages[0]){
                     cell.Div();
                 } else{
@@ -272,15 +290,15 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
             } else if ((cell.type == SGM_PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(r < eventPercentages[3]) {
                     cell.Die();
-                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_ANEU);
+                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_ANEU, totalResistance);
                     if(cell.Xpt()+0.5 < xDim-0.5){
-                        NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(SGM_ANEU);
+                        NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(SGM_ANEU, totalResistance);
                     } else if (cell.Ypt()+0.5 < yDim - 0.5){
-                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(SGM_ANEU);
+                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(SGM_ANEU, totalResistance);
                     } else if (cell.Xpt()-0.5 > xDim +0.5){
-                        NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(SGM_ANEU);
+                        NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(SGM_ANEU, totalResistance);
                     } else if(cell.Ypt() -0.5 > yDim +0.5) {
-                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(SGM_ANEU);
+                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(SGM_ANEU, totalResistance);
                     } else {
 
                     }
