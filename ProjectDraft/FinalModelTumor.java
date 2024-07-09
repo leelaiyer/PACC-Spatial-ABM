@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static HAL.Util.*;
 
-class Cell1 extends SphericalAgent2D<Cell2, FinalModelTumor>{
+class Cell1 extends SphericalAgent2D<Cell1, FinalModelTumor>{
     int type;
     double forceSum;
     double resistance;
@@ -25,7 +25,7 @@ class Cell1 extends SphericalAgent2D<Cell2, FinalModelTumor>{
         }
     }
 
-    double ForceCalc(double overlap, Cell2 other){
+    double ForceCalc(double overlap, Cell1 other){
         if(overlap < 0) {
             return 0;
         }
@@ -72,7 +72,7 @@ class Cell1 extends SphericalAgent2D<Cell2, FinalModelTumor>{
     }
 }
 
-public class FinalModelTumor extends AgentGrid2D<Cell2> {
+public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int PACC = RGB256(60, 179, 113);
@@ -87,16 +87,16 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
     double ANEU_INHIB_WEIGHT = 0.05;
     public static int PACCPop = 0;
     public static int aneuPop = 0;
-    ArrayList<Cell2> neighborList = new ArrayList<>();
+    ArrayList<Cell1> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
-    Rand rn = new Rand(0);
+    Rand rn = new Rand();
     Gaussian gaussian = new Gaussian();
     static double totalResistance = 0;
     FileIO out;
 
     public FinalModelTumor(int x, int y, String outFileName) {
-        super(x, y, Cell2.class, true, true);
+        super(x, y, Cell1.class, true, true);
 
         out = new FileIO(outFileName, "w");
     }
@@ -157,10 +157,10 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
 
     public void Draw(OpenGL2DWindow vis) {
         vis.Clear(WHITE);
-        for (Cell2 cell : this) {
+        for (Cell1 cell : this) {
             vis.Circle(cell.Xpt(),cell.Ypt(),cell.radius,CYTOPLASM);
         }
-        for (Cell2 cell : this) {
+        for (Cell1 cell : this) {
             vis.Circle(cell.Xpt(), cell.Ypt(), cell.radius / 3, cell.type);
         }
         vis.Update();
@@ -169,7 +169,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
     public void StepCells(OpenGL2DWindow vis) {
         PACCPop = 0;
         aneuPop = 0;
-        for (Cell2 cell : this) {
+        for (Cell1 cell : this) {
             if (cell.type == PACC) {
                 PACCPop++;
             } else {
@@ -180,14 +180,14 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
         System.out.println("aneuPop: " + aneuPop);
         System.out.println(" ");
 
-        for (Cell2 cell : this) {
+        for (Cell1 cell : this) {
             cell.CalcMove();
         }
 
-        for (Cell2 cell : this) {
+        for (Cell1 cell : this) {
             cell.Move();
             cell.Mutation();
-           double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(175, aneuPop, totalResistance)};
+            double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(0, aneuPop, totalResistance)};
             double sum = 0;
             for(int i = 0; i < eventProbabilities.length; i++){
                 sum = sum + eventProbabilities[i];
@@ -236,7 +236,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell2> {
 
     public void RecordOut (FileIO writeHere){
         int ctPACC = 0, ctAneu = 0;
-        for (Cell2 cell : this) {
+        for (Cell1 cell : this) {
             if (cell.type == PACC) {
                 ctPACC++;
             } else {
