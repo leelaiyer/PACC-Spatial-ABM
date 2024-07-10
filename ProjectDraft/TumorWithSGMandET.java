@@ -70,27 +70,39 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
 
 
     public void MutationET() {
-        boolean mutated = G.rn.Bool();
-        if(!mutated) {
+        if (TumorWithSGMandET.deathDueToDrug(TumorWithSGMandET.drugDose, TumorWithSGMandET.ET_AneuPop, TumorWithSGMandET.totalResistance) > TumorWithSGMandET.fitnessThresholdET) {
+            boolean mutated = G.rn.Bool();
+            if (!mutated) {
 
-        } else if(mutated) {
-            double favorability = G.rn.Double(1);
-            if(favorability < 0.9) {
+            } else if (mutated) {
+                double favorability = G.rn.Double(1);
+                if (favorability < 0.9) {
 
-            } else if(favorability > 0.9) {
-                double resistanceAdded = G.rn.Double(1);
-                resistance = G.totalResistance + resistanceAdded;
+                } else if (favorability > 0.9) {
+                    double resistanceAdded = G.rn.Double(1);
+                    resistance = G.totalResistance + resistanceAdded;
+                }
             }
+        } else {
+
         }
     }
 
     public void MutationSGM() {
         int [] neighborhood = CircleHood(false,radius);
         int options = MapEmptyHood(neighborhood);
-        if (options>0){
+        if ((options>0)&&(TumorWithSGMandET.deathDueToDrug(TumorWithSGMandET.drugDose, TumorWithSGMandET.ET_AneuPop, TumorWithSGMandET.totalResistance) < TumorWithSGMandET.fitnessThresholdSGM)){
             MutationET();
         } else {
+            while(resistance < TumorWithSGMandET.resistancethresholdSGM) {
+                double favorability = G.rn.Double(1);
+                if (favorability < 0.9) {
 
+                } else if (favorability > 0.9) {
+                    double resistanceAdded = G.rn.Double(1);
+                    resistance = G.totalResistance + resistanceAdded;
+                }
+            }
         }
     }
 }
@@ -117,6 +129,9 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
     public static int SGM_PACCPop = 0;
     public static int SGM_AneuPop = 0;
     public static int drugDose = 0;
+    public static int fitnessThresholdET = 0;
+    public static int fitnessThresholdSGM = 0;
+    public static int resistancethresholdSGM = 0;
     ArrayList<Cell2> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
@@ -166,7 +181,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
         OpenGL2DWindow vis = new OpenGL2DWindow("Tumor With SGM and ET", 750, 750, x, y);
         model.Setup( 200, 5);
         int i = 0;
-        while ((i<10000)&&(!vis.IsClosed())) {
+        while ((i<1000)&&(!vis.IsClosed())) {
             vis.TickPause(10);
             model.Draw(vis);
             model.StepCells(vis);
@@ -279,23 +294,25 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
             } if ((cell.type == SGM_ANEU) && (cell.CanDivide(ANEU_DIV_BIAS, ANEU_INHIB_WEIGHT))) {
                 if (r < eventPercentages[4]) {
                     cell.Die();
-                } else if((r < eventPercentages[1])||(r < eventPercentages[2])){
+                } else if((r < eventPercentages[1])||(r < eventPercentages[2])) {
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_PACC, totalResistance);
                 } else if(r < eventPercentages[0]){
+                    cell.MutationSGM();
                     cell.Div();
-                } else{
+                } else {
 
                 }
             } else if ((cell.type == SGM_PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(r < eventPercentages[3]) {
+                    cell.MutationSGM();
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_ANEU, totalResistance);
-                    if(cell.Xpt()+0.5 < xDim-0.5){
+                    if(cell.Xpt()+0.5 < xDim-0.5) {
                         NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(SGM_ANEU, totalResistance);
-                    } else if (cell.Ypt()+0.5 < yDim - 0.5){
+                    } else if (cell.Ypt()+0.5 < yDim - 0.5) {
                         NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(SGM_ANEU, totalResistance);
-                    } else if (cell.Xpt()-0.5 > xDim +0.5){
+                    } else if (cell.Xpt()-0.5 > xDim +0.5) {
                         NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(SGM_ANEU, totalResistance);
                     } else if(cell.Ypt() -0.5 > yDim +0.5) {
                         NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(SGM_ANEU, totalResistance);
