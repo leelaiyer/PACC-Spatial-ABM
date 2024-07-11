@@ -131,7 +131,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
     public static int drugDose = 0;
     public static int fitnessThresholdET = 0;
     public static int fitnessThresholdSGM = 0;
-    public static int resistancethresholdSGM = 0;
+    public static int resistancethresholdSGM = 20;
     ArrayList<Cell2> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
