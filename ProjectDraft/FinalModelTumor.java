@@ -186,7 +186,6 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
         for (Cell1 cell : this) {
             cell.Move();
-            cell.Mutation();
             double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(150, aneuPop, totalResistance)};
             double sum = 0;
             for(int i = 0; i < eventProbabilities.length; i++){
@@ -205,12 +204,14 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(PACC);
                 } else if(r < eventPercentages[0]){
+                    cell.Mutation();
                     cell.Div();
                 } else{
 
                 }
             } else if ((cell.type == PACC) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 if(r < eventPercentages[3]) {
+                    cell.Mutation();
                     cell.Die();
                     NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ANEUPLOID);
                     if(cell.Xpt()+0.5 < xDim-0.5){
