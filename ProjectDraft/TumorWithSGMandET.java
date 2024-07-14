@@ -8,6 +8,7 @@ import HAL.Tools.Internal.Gaussian;
 import HAL.Rand;
 
 import java.lang.Math;
+import java.sql.Array;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,7 +97,7 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
                 if (favorability < 0.9) {
 
                 } else if (favorability > 0.9) {
-                    double resistanceAdded = G.rn.Double(100);
+                    double resistanceAdded = G.rn.Double(1000);
                     resistance = G.totalResistance + resistanceAdded;
                 }
             }
@@ -145,8 +146,8 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
         out = new FileIO(outFileName, "w");
     }
 
-    public double facultativeToPACC(double drugDose, double drugResistance) {
-        double facultative = drugDose/(100+drugResistance);
+    public double facultativeToPACC(double drugDose, double totalResistance) {
+        double facultative = 0.7*(drugDose/(100+totalResistance));
         return facultative;
 
     }
@@ -163,10 +164,25 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
         OpenGL2DWindow vis = new OpenGL2DWindow("Tumor With SGM and ET", 700, 700, x, y);
         model.Setup( 200, 5);
         int i = 0;
-        while ((i<100000)&&(!vis.IsClosed())) {
-            vis.TickPause(0);
-            model.Draw(vis);
-            model.StepCells();
+        while ((i < 100000)&&(!vis.IsClosed())) {
+            while(i < 100){
+                vis.TickPause(0);
+                model.Draw(vis);
+                model.StepCells();
+                i++;
+            } while (i< 3000) {
+                drugDose = 100;
+                vis.TickPause(0);
+                model.Draw(vis);
+                model.StepCells();
+                i++;
+            } while(i < 40000000) {
+                drugDose = 0;
+                vis.TickPause(0);
+                model.Draw(vis);
+                model.StepCells();
+                i++;
+            }
 
         }
         if (model.out != null) {
@@ -210,64 +226,71 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
             cell.Move();
         }
         for (Cell2 cell : this) {
-            double logistic;
-            double obligate;
-            double facultative = 0;
-            double death;
-            double from;
-            if((cell.type == SGM_PACC)||(cell.type == ET_PACC)) {
-                logistic = 0;
-                obligate = 0;
-                facultative = 0;
-                death = 0;
-                from = 0.4;
-            } else {
-                from = 0;
-                logistic = 0.6;
-                obligate = 0.02;
-                facultative = facultativeToPACC(drugDose, totalResistance);
-                death = deathDueToDrug(drugDose, totalResistance);
-            }
-            double[] eventProbabilities = {logistic,
-                    obligate, facultative,
-                    from, death};
-
-            double sum = 0;
-            for(int i = 0; i < eventProbabilities.length; i++){
-                sum = sum + eventProbabilities[i];
-            }
-            double[] eventPercentages = new double[eventProbabilities.length];
-            for(int w = 0; w < eventPercentages.length; w++) {
-                eventPercentages[w] = (eventProbabilities[w]/sum);
-            }
-            double[] events = new double[eventPercentages.length];
-            events[0] = eventPercentages[0];
-            for(int e = 1; e < eventPercentages.length; e++) {
-                events[e] = events[e-1] + eventPercentages[e];
-            }
-
-            double r = rn.Double(1);
-            double r2 = r3.Double(1);
-            System.out.println("event percentages: " + Arrays.toString(eventPercentages));
-            System.out.println("events: " + Arrays.toString(events));
-            System.out.println("random: " + r);
+            double logistic = 0.6;
+            double obligate = 0.02;
+            double facultative = facultativeToPACC(drugDose, totalResistance);
+            double death = deathDueToDrug(drugDose, totalResistance);
+            double from = 0;
+            double nothing = rn.Double(0.5);
 
         if(((cell.type == ET_ANEU)||(cell.type == SGM_ANEU))&&(cell.CanDivide(ANEU_DIV_BIAS,ANEU_INHIB_WEIGHT))) {
-            if (r < 0.6) {
+            double[] eventsAneu = {logistic, obligate, facultative, death, nothing};
+            double[] eventPercentagesAneu = new double[eventsAneu.length];
+            double sum = logistic + obligate + facultative + death + nothing;
+            for(int i = 0; i< eventsAneu.length; i++) {
+                eventPercentagesAneu[i] = (eventsAneu[i]/sum);
+            }
+            double[] eventProbabilitiesAneu = new double[eventsAneu.length];
+            eventProbabilitiesAneu[0] = eventPercentagesAneu[0];
+            for(int i = 1; i < eventsAneu.length; i++) {
+                eventProbabilitiesAneu[i] = eventProbabilitiesAneu[i-1] + eventPercentagesAneu[i];
+            }
+            System.out.println("events: " + Arrays.toString(eventsAneu));
+            System.out.println("event percents: " + Arrays.toString(eventPercentagesAneu));
+            System.out.println("event probs: " + Arrays.toString(eventProbabilitiesAneu));
+
+            double r = rn.Double(1);
+            System.out.println("random: " + r);
+            if (r < eventProbabilitiesAneu[0]) {
+                System.out.println("logistic");
                 cell.Mutation();
                 cell.Div();
-            } else if(((r2 < obligate)&&(eventPercentages[1] != 0))||((r < events[2])&&(eventPercentages[2] != 0))) {
-                    cell.Die();
-                    if(cell.type == ET_ANEU) {
-                        NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_PACC, totalResistance);
-                    } else {
-                        NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_PACC, totalResistance);
-                    }
-                }  else if((r < events[4])&&(eventPercentages[4] != 0)) {
-                     cell.Die();
-                 }
-            } if(((cell.type == ET_PACC)||(cell.type == SGM_PACC))&&(cell.CanDivide(PACC_DIV_BIAS,PACC_INHIB_WEIGHT))) {
-                if((r < 0.4)&&(eventPercentages[3] != 0)) {
+            } else if((r < eventProbabilitiesAneu[1])||(r < eventProbabilitiesAneu[2])) {
+                 System.out.println("obligate or facultative");
+                cell.Die();
+                if(cell.type == ET_ANEU) {
+                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_PACC, totalResistance);
+                } else {
+                    NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_PACC, totalResistance);
+                }
+            }  else if(r < eventProbabilitiesAneu[3]) {
+                 System.out.println("death");
+                cell.Die();
+            } else if(r < eventProbabilitiesAneu[4]) {
+                 System.out.println("nothing");
+
+             }
+        } else if(((cell.type == ET_PACC)||(cell.type == SGM_PACC))&&(cell.CanDivide(PACC_DIV_BIAS,PACC_INHIB_WEIGHT))) {
+            System.out.println("pacc");
+            from = 0.4;
+            double[] eventsPACC = {from, nothing};
+            double[] eventPercentagesPACC = new double[eventsPACC.length];
+            double sum = from + nothing;
+            for(int i = 0; i < eventsPACC.length; i++) {
+                eventPercentagesPACC[i] = (eventsPACC[i]/sum);
+            }
+            double[] eventProbabilitiesPACC = new double[eventsPACC.length];
+            eventProbabilitiesPACC[0] = eventPercentagesPACC[0];
+            for(int i = 1; i < eventsPACC.length; i++) {
+                eventProbabilitiesPACC[i] = eventProbabilitiesPACC[i-1] + eventPercentagesPACC[i];
+            }
+            double r = rn.Double(1);
+            System.out.println("events: " + Arrays.toString(eventsPACC));
+            System.out.println("event percents: " + Arrays.toString(eventPercentagesPACC));
+            System.out.println("event probs: " + Arrays.toString(eventProbabilitiesPACC));
+            System.out.println("random: " + r);
+                if(r < eventProbabilitiesPACC[0]) {
+                    System.out.println("from");
                     cell.Mutation();
                     cell.Die();
                     if(cell.type == ET_PACC) {
@@ -298,6 +321,8 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
 
                         }
                     }
+
+                } else if(r < eventProbabilitiesPACC[1]) {
 
                 }
             }

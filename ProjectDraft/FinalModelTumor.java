@@ -186,7 +186,7 @@ public class FinalModelTumor extends AgentGrid2D<Cell1> {
 
         for (Cell1 cell : this) {
             cell.Move();
-            double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(150, aneuPop, totalResistance)};
+            double[] eventProbabilities = {logisticGrowth(aneuPop, PACCPop), obligateToPACC(aneuPop), facultativeToPACC(aneuPop, 5), fromPACC(PACCPop), deathDueToDrug(0.7, aneuPop, totalResistance)};
             double sum = 0;
             for(int i = 0; i < eventProbabilities.length; i++){
                 sum = sum + eventProbabilities[i];
