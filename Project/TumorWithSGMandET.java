@@ -1,4 +1,4 @@
-package ProjectDraft;
+package Project;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
 import HAL.GridsAndAgents.AgentGrid2D;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static HAL.Util.*;
 
-class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
+class Cell extends SphericalAgent2D<Cell, TumorWithSGMandET>{
     int type;
     double resistance;
     double forceSum;
@@ -30,7 +30,7 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
         }
     }
 
-    double ForceCalc(double overlap, Cell2 other) {
+    double ForceCalc(double overlap, Cell other) {
         if(overlap < 0) {
             return 0;
         }
@@ -116,7 +116,7 @@ class Cell2 extends SphericalAgent2D<Cell2, TumorWithSGMandET>{
     }
 }
 
-public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
+public class TumorWithSGMandET extends AgentGrid2D<Cell> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int ET_PACC = RGB256(155, 155, 235);
@@ -136,17 +136,17 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
     public static int time = 0;
     public static double drugDose = 0;
     public static int fitnessThreshold = 50;
-    ArrayList<Cell2> neighborList = new ArrayList<>();
+    ArrayList<Cell> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
     Rand r3 = new Rand(0);
     Gaussian gaussian = new Gaussian();
-    static double totalResistance = 0;
+    public double totalResistance = 0;
     FileIO out;
 
 
     public TumorWithSGMandET(int x, int y, String outFileName) {
-        super(x, y, Cell2.class, true, true);
+        super(x, y, Cell.class, true, true);
         out = new FileIO(outFileName, "w");
     }
 
@@ -215,10 +215,10 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
 
     public void Draw(OpenGL2DWindow vis) {
         vis.Clear(WHITE);
-        for (Cell2 cell : this) {
+        for (Cell cell : this) {
             vis.Circle(cell.Xpt(),cell.Ypt(),cell.radius,CYTOPLASM);
         }
-        for (Cell2 cell : this) {
+        for (Cell cell : this) {
             vis.Circle(cell.Xpt(), cell.Ypt(), cell.radius / 3, cell.type);
         }
         vis.Update();
@@ -226,12 +226,12 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
 
     public void StepCells() {
 
-        for(Cell2 cell : this){
+        for(Cell cell : this){
             cell.CalcMove();
-        } for(Cell2 cell : this) {
+        } for(Cell cell : this) {
             cell.Move();
         }
-        for (Cell2 cell : this) {
+        for (Cell cell : this) {
             double logistic = 0.6;
             double obligate = 0.02;
             double facultative = facultativeToPACC(drugDose, cell.resistance);
@@ -328,7 +328,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell2> {
         int ctPACCSGM = 0, ctPACCET = 0, ctAneuSGM = 0, ctAneuET = 0;
         int resistancePACCET = 0, resistancePACCSGM = 0, resistanceAneuET = 0, resistanceAneuSGM = 0;
 
-        for (Cell2 cell : this) {
+        for (Cell cell : this) {
             if (cell.type == ET_PACC) {
                 ctPACCET++;
                 resistancePACCET++;

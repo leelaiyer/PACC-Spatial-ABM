@@ -1,4 +1,4 @@
-package ProjectDraft;
+package ProjectFirstDraft;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
 import HAL.GridsAndAgents.AgentGrid2D;
@@ -6,7 +6,6 @@ import HAL.Gui.OpenGL2DWindow;
 import HAL.Tools.FileIO;
 import HAL.Tools.Internal.Gaussian;
 import HAL.Rand;
-
 import java.lang.Math;
 import java.util.ArrayList;
 
@@ -18,9 +17,9 @@ class Cell1 extends SphericalAgent2D<Cell1, FinalModelTumor>{
     double resistance;
     public void Init(int color) {
         this.type = color;
-        if (type == FirstModelTumor.PACC) {
+        if (type == FinalModelTumor.PACC) {
             this.radius = 0.5;
-        } else if (type == FirstModelTumor.ANEUPLOID) {
+        } else if (type == FinalModelTumor.ANEUPLOID) {
             this.radius = 0.25;
         }
     }
