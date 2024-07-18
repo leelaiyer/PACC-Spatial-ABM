@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static HAL.Util.*;
 
-class Cell extends SphericalAgent2D<Cell, TumorWithSGMandET>{
+class Cell extends SphericalAgent2D <Cell, TumorWithSGMandET> {
     int type;
     double resistance;
     double forceSum;
@@ -37,11 +37,11 @@ class Cell extends SphericalAgent2D<Cell, TumorWithSGMandET>{
         return G.FORCE_SCALER*overlap;
     }
 
-    public void CalcMove(){
+    public void CalcMove() {
         forceSum = SumForces(1.14, this::ForceCalc);
     }
 
-    public boolean CanDivide(double div_bias,double inhib_weight){
+    public boolean CanDivide(double div_bias,double inhib_weight) {
         return G.rn.Double()<Math.tanh(div_bias-forceSum*inhib_weight);
     }
 
@@ -73,11 +73,7 @@ class Cell extends SphericalAgent2D<Cell, TumorWithSGMandET>{
         if((type == TumorWithSGMandET.ET_ANEU)||(type == TumorWithSGMandET.ET_PACC)) {
             boolean mutated;
             if((options < 0)||(TumorWithSGMandET.deathDueToDrug(TumorWithSGMandET.drugDose, resistance) > TumorWithSGMandET.fitnessThreshold)) {
-                if(mutationChance < 0.7) {
-                    mutated = true;
-                } else {
-                    mutated = false;
-                }
+                mutated = mutationChance < 0.7;
             } else {
                 if(mutationChance < 0.3) {
                     mutated = true;
@@ -116,7 +112,7 @@ class Cell extends SphericalAgent2D<Cell, TumorWithSGMandET>{
     }
 }
 
-public class TumorWithSGMandET extends AgentGrid2D<Cell> {
+public class TumorWithSGMandET extends AgentGrid2D <Cell> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int ET_PACC = RGB256(155, 155, 235);
@@ -130,8 +126,8 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
     double FORCE_SCALER = .25;
     double FRICTION = .4;
     double PACC_DIV_BIAS = 0.02;
-    double ANEU_DIV_BIAS = 0.01;
-    double PACC_INHIB_WEIGHT = 0.05;
+    double ANEU_DIV_BIAS = 0.02;
+    double PACC_INHIB_WEIGHT = 0.02;
     double ANEU_INHIB_WEIGHT = 0.02;
     public static int time = 0;
     public static double drugDose = 0;
@@ -174,8 +170,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
                     model.Draw(vis);
                     model.StepCells();
                     time++;
-                }
-                while(time < 5000) {
+                } while(time < 5000) {
                     drugDose = 250;
                     CYTOPLASM = drugCYTOPLASM;
                     vis.TickPause(0);
@@ -226,7 +221,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
 
     public void StepCells() {
 
-        for(Cell cell : this){
+        for(Cell cell : this) {
             cell.CalcMove();
         } for(Cell cell : this) {
             cell.Move();
@@ -293,9 +288,9 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
                         NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_ANEU, cell.resistance);
                         if(cell.Xpt()+0.5 < xDim - 0.5) {
                             NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                        } else if (cell.Ypt()+0.5 < yDim - 0.5){
+                        } else if (cell.Ypt()+0.5 < yDim - 0.5) {
                             NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ET_ANEU, cell.resistance);
-                        } else if (cell.Xpt()-0.5 > xDim + 0.5){
+                        } else if (cell.Xpt()-0.5 > xDim + 0.5) {
                             NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ET_ANEU, cell.resistance);
                         } else if(cell.Ypt() -0.5 > yDim + 0.5) {
                             NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ET_ANEU, cell.resistance);
@@ -304,9 +299,9 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
                         NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                         if(cell.Xpt()+0.5 < xDim - 0.5) {
                             NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                        } else if (cell.Ypt()+0.5 < yDim - 0.5){
+                        } else if (cell.Ypt()+0.5 < yDim - 0.5) {
                             NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(SGM_ANEU, cell.resistance);
-                        } else if (cell.Xpt()-0.5 > xDim + 0.5){
+                        } else if (cell.Xpt()-0.5 > xDim + 0.5) {
                             NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                         } else if(cell.Ypt() -0.5 > yDim + 0.5) {
                             NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(SGM_ANEU, cell.resistance);
@@ -318,13 +313,13 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
                 }
             }
         }
-        if(out!=null){
+        if(out!=null) {
             //if an output file has been generated, write to it
             RecordOutSize(out);
         }
     }
 
-    public void RecordOutSize (FileIO writeHere){
+    public void RecordOutSize (FileIO writeHere) {
         int ctPACCSGM = 0, ctPACCET = 0, ctAneuSGM = 0, ctAneuET = 0;
         int resistancePACCET = 0, resistancePACCSGM = 0, resistanceAneuET = 0, resistanceAneuSGM = 0;
 
@@ -332,7 +327,7 @@ public class TumorWithSGMandET extends AgentGrid2D<Cell> {
             if (cell.type == ET_PACC) {
                 ctPACCET++;
                 resistancePACCET++;
-            } else if(cell.type == SGM_PACC){
+            } else if(cell.type == SGM_PACC) {
                 ctPACCSGM++;
                 resistancePACCSGM++;
             } else if(cell.type == ET_ANEU) {
