@@ -12,20 +12,20 @@ import java.util.ArrayList;
 
 import static HAL.Util.*;
 
-class Cell4 extends SphericalAgent2D<Cell4, DifferentSGMMutationStrategy>{
+class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy>{
     int type;
     double resistance;
     double forceSum;
     public void Init(int color, double resistance) {
         this.type = color;
         this.resistance = resistance + G.totalResistance;
-        if (type == DifferentSGMMutationStrategy.SGM_PACC) {
+        if (type == FinalSGMMutationStrategy.SGM_PACC) {
             this.radius = 0.15;
-        } else if (type == DifferentSGMMutationStrategy.SGM_ANEU) {
+        } else if (type == FinalSGMMutationStrategy.SGM_ANEU) {
             this.radius = 0.1;
-        } else if (type == DifferentSGMMutationStrategy.ET_PACC) {
+        } else if (type == FinalSGMMutationStrategy.ET_PACC) {
             this.radius = 0.15;
-        } else if (type == DifferentSGMMutationStrategy.ET_ANEU) {
+        } else if (type == FinalSGMMutationStrategy.ET_ANEU) {
             this.radius = 0.1;
         }
     }
@@ -51,14 +51,14 @@ class Cell4 extends SphericalAgent2D<Cell4, DifferentSGMMutationStrategy>{
     }
 
     public void Div() {
-        if (type == DifferentSGMMutationStrategy.SGM_PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(DifferentSGMMutationStrategy.SGM_PACC, resistance);
-        } else if(type == DifferentSGMMutationStrategy.SGM_ANEU) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(DifferentSGMMutationStrategy.SGM_ANEU, resistance);
-        } else if(type == DifferentSGMMutationStrategy.ET_PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(DifferentSGMMutationStrategy.ET_PACC, resistance);
-        } else if(type == DifferentSGMMutationStrategy.ET_ANEU) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(DifferentSGMMutationStrategy.ET_ANEU, resistance);
+        if (type == FinalSGMMutationStrategy.SGM_PACC) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.SGM_PACC, resistance);
+        } else if(type == FinalSGMMutationStrategy.SGM_ANEU) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.SGM_ANEU, resistance);
+        } else if(type == FinalSGMMutationStrategy.ET_PACC) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.ET_PACC, resistance);
+        } else if(type == FinalSGMMutationStrategy.ET_ANEU) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.ET_ANEU, resistance);
         }
     }
 
@@ -71,7 +71,7 @@ class Cell4 extends SphericalAgent2D<Cell4, DifferentSGMMutationStrategy>{
         int options = MapEmptyHood(neighborhood);
         double mutationChance = G.rn.Double(1);
         boolean mutated;
-        if ((options < 0) || (DifferentSGMMutationStrategy.deathDueToDrug(DifferentSGMMutationStrategy.drugDose, resistance) > DifferentSGMMutationStrategy.fitnessThreshold)) {
+        if ((options < 0) || (FinalSGMMutationStrategy.deathDueToDrug(FinalSGMMutationStrategy.drugDose, resistance) > FinalSGMMutationStrategy.fitnessThreshold)) {
             if (mutationChance < 0.7) {
                 mutated = true;
             } else {
@@ -94,7 +94,7 @@ class Cell4 extends SphericalAgent2D<Cell4, DifferentSGMMutationStrategy>{
     }
 }
 
-public class DifferentSGMMutationStrategy extends AgentGrid2D<Cell4> {
+public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int ET_PACC = RGB256(155, 155, 235);
@@ -130,7 +130,7 @@ public class DifferentSGMMutationStrategy extends AgentGrid2D<Cell4> {
     FileIO out2;
 
 
-    public DifferentSGMMutationStrategy(int x, int y, String outFileName, String outFileName2) {
+    public FinalSGMMutationStrategy(int x, int y, String outFileName, String outFileName2) {
         super(x, y, Cell4.class, true, true);
         out = new FileIO(outFileName, "w");
         out2 = new FileIO(outFileName2,"w");
@@ -147,7 +147,7 @@ public class DifferentSGMMutationStrategy extends AgentGrid2D<Cell4> {
     public static void main(String[] args) {
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
-        DifferentSGMMutationStrategy model = new DifferentSGMMutationStrategy(x, y, "TumorDistData.csv", "TumorPopData.csv");
+        FinalSGMMutationStrategy model = new FinalSGMMutationStrategy(x, y, "TumorDistData.csv", "TumorPopData.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow("SGM and ET Tumor", 700, 700, x, y);
         model.Setup( 200, 2);
         while ((time < 100000)&&(!vis.IsClosed())) {
@@ -261,11 +261,6 @@ public class DifferentSGMMutationStrategy extends AgentGrid2D<Cell4> {
             double nothing = rn.Double(0.5);
 
             if(((cell.type == ET_ANEU)||(cell.type == SGM_ANEU))&&(cell.CanDivide(ANEU_DIV_BIAS,ANEU_INHIB_WEIGHT))) {
-                if(cell.type == ET_ANEU) {
-                    System.out.println("et aneu resistance = " + cell.resistance);
-                } else {
-                    System.out.println("sgm aneu resistance = " + cell.resistance);
-                }
                 double[] eventsAneu = {logistic, death, obligate, facultative, nothing};
                 double[] eventPercentagesAneu = new double[eventsAneu.length];
                 double sum = logistic + obligate + facultative + death + nothing;
@@ -308,7 +303,7 @@ public class DifferentSGMMutationStrategy extends AgentGrid2D<Cell4> {
                 double r = rn.Double(1);
                 if(r < eventProbabilitiesPACC[0]) {
                     if(cell.type == ET_PACC) {
-                            cell.Mutation();
+                        cell.Mutation();
                         cell.Die();
                         NewAgentPT(cell.Xpt(), cell.Ypt()).Init(ET_ANEU, cell.resistance);
                         double r1 = rn.Double(1);

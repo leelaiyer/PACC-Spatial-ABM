@@ -239,9 +239,7 @@ public class NonspatialTumor extends AgentGrid2D<Cell7> {
                 double r = rn.Double(1);
 
                 if (r < eventProbabilitiesAneu[0]) {
-                    if(drugDose > 0) {
-                        cell.Mutation();
-                    }
+                    cell.Mutation();
                     cell.Div();
                 } else if((r < eventProbabilitiesAneu[1])&&(eventsAneu[1] != 0)) {
                     cell.Die();
@@ -268,40 +266,23 @@ public class NonspatialTumor extends AgentGrid2D<Cell7> {
                 }
                 double r = rn.Double(1);
                 if(r < eventProbabilitiesPACC[0]) {
-                    if(cell.type == ET_PACC) {
-                        if(drugDose > 0) {
-                            cell.Mutation();
-                        }
+                    if (cell.type == ET_PACC) {
+                        cell.Mutation();
                         cell.Die();
-                        NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                        if(cell.Xpt()+0.5 < xDim - 0.5) {
-                            NewAgentPT(cell.Xpt()+0.5, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                        } else if (cell.Ypt()+0.5 < yDim - 0.5){
-                            NewAgentPT(cell.Xpt(), cell.Ypt()+0.5).Init(ET_ANEU, cell.resistance);
-                        } else if (cell.Xpt()-0.5 > xDim + 0.5){
-                            NewAgentPT(cell.Xpt()-0.5, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                        } else if(cell.Ypt() -0.5 > yDim + 0.5) {
-                            NewAgentPT(cell.Xpt(), cell.Ypt()-0.5).Init(ET_ANEU, cell.resistance);
+                        NewAgentPT(cell.Xpt(), cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                        if (cell.Xpt() + 0.5 < xDim - 0.5) {
+                            NewAgentPT(cell.Xpt() + 0.5, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                        } else if (cell.Ypt() + 0.5 < yDim - 0.5) {
+                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.5).Init(ET_ANEU, cell.resistance);
+                        } else if (cell.Xpt() - 0.5 > xDim + 0.5) {
+                            NewAgentPT(cell.Xpt() - 0.5, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                        } else if (cell.Ypt() - 0.5 > yDim + 0.5) {
+                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.5).Init(ET_ANEU, cell.resistance);
                         }
-                    } else if(cell.type == SGM_PACC) {
-                        if(drugDose > 0) {
-                            cell.Mutation();
-
-                            double resistanceThreshold = 10;
-                            if (cell.resistance > resistanceThreshold) {
-                                cell.Die();
-                                NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                if (cell.Xpt() + 0.5 < xDim - 0.5) {
-                                    NewAgentPT(cell.Xpt() + 0.5, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                } else if (cell.Ypt() + 0.5 < yDim - 0.5) {
-                                    NewAgentPT(cell.Xpt(), cell.Ypt() + 0.5).Init(SGM_ANEU, cell.resistance);
-                                } else if (cell.Xpt() - 0.5 > xDim + 0.5) {
-                                    NewAgentPT(cell.Xpt() - 0.5, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                } else if (cell.Ypt() - 0.5 > yDim + 0.5) {
-                                    NewAgentPT(cell.Xpt(), cell.Ypt() - 0.5).Init(SGM_ANEU, cell.resistance);
-                                }
-                            }
-                        } else {
+                    } else if (cell.type == SGM_PACC) {
+                        cell.Mutation();
+                        double resistanceThreshold = 10;
+                        if (cell.resistance > resistanceThreshold) {
                             cell.Die();
                             NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                             if (cell.Xpt() + 0.5 < xDim - 0.5) {
@@ -313,6 +294,18 @@ public class NonspatialTumor extends AgentGrid2D<Cell7> {
                             } else if (cell.Ypt() - 0.5 > yDim + 0.5) {
                                 NewAgentPT(cell.Xpt(), cell.Ypt() - 0.5).Init(SGM_ANEU, cell.resistance);
                             }
+                        }
+                    } else {
+                        cell.Die();
+                        NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                        if (cell.Xpt() + 0.5 < xDim - 0.5) {
+                            NewAgentPT(cell.Xpt() + 0.5, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                        } else if (cell.Ypt() + 0.5 < yDim - 0.5) {
+                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.5).Init(SGM_ANEU, cell.resistance);
+                        } else if (cell.Xpt() - 0.5 > xDim + 0.5) {
+                            NewAgentPT(cell.Xpt() - 0.5, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                        } else if (cell.Ypt() - 0.5 > yDim + 0.5) {
+                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.5).Init(SGM_ANEU, cell.resistance);
                         }
                     }
 
