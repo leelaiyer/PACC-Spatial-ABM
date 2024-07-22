@@ -2,6 +2,7 @@ package Project;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
 import HAL.GridsAndAgents.AgentGrid2D;
+import HAL.Gui.GifMaker;
 import HAL.Gui.OpenGL2DWindow;
 import HAL.Tools.FileIO;
 import HAL.Tools.Internal.Gaussian;
@@ -105,6 +106,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     static int CYTOPLASM = RGB256(255,227,217);
 
     Rand rn = new Rand(System.nanoTime());
+    static String path = "/Users/leelaiyer/Downloads/HAL-master/Outputs/";
     public double SGMPACCPosition = 0;
     public double SGMANEUPosition = 0;
     public double ETPACCPosition = 0;
@@ -128,6 +130,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     static double totalResistance = 0;
     FileIO out;
     FileIO out2;
+    OpenGL2DWindow vis;
 
 
     public FinalSGMMutationStrategy(int x, int y, String outFileName, String outFileName2) {
@@ -151,31 +154,45 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
         OpenGL2DWindow vis = new OpenGL2DWindow("SGM and ET Tumor", 700, 700, x, y);
         model.Setup( 200, 2);
         while ((time < 100000)&&(!vis.IsClosed())) {
-            while(time < 300) {
+            int time2 = 0;
+            for(int i = 0; i < 3; i++) {
+                time2 = 0;
+                while (time2 < 300) {
+                    drugDose = 0;
+                    CYTOPLASM = RGB256(255, 228, 225);
+                    vis.TickPause(0);
+                    model.Draw(vis);
+                    model.StepCells();
+                    model.cellDistanceMethod();
+                    if(time%100 == 0) {
+                        vis.ToPNG(path.concat("img_" + time + ".png"));
+                    }
+                    time++;
+                    time2++;
+                    System.out.println("time: " + time);
+                }
+                while (time2 < 600) {
+                    drugDose = 50;
+                    CYTOPLASM = drugCYTOPLASM;
+                    vis.TickPause(0);
+                    model.Draw(vis);
+                    model.StepCells();
+                    model.cellDistanceMethod();
+                    if(time%100 == 0) {
+                        vis.ToPNG(path.concat("img_" + time + ".png"));
+                    }                    time++;
+                    time2++;
+                    System.out.println("time: " + time);
+                }
+            } while(time < 2500) {
                 drugDose = 0;
+                CYTOPLASM = RGB256(255, 228, 225);
                 vis.TickPause(0);
                 model.Draw(vis);
                 model.StepCells();
                 model.cellDistanceMethod();
                 time++;
-                System.out.println("time: " + time);
-            } while(time < 5000) {
-                drugDose = 250;
-                CYTOPLASM = drugCYTOPLASM;
-                vis.TickPause(0);
-                model.Draw(vis);
-                model.StepCells();
-                model.cellDistanceMethod();
-                time++;
-                System.out.println("time: " + time);
-            } while(time < 10000) {
-                drugDose = 0;
-                CYTOPLASM = RGB256(255,228,225);
-                vis.TickPause(0);
-                model.Draw(vis);
-                model.StepCells();
-                model.cellDistanceMethod();
-                time++;
+                time2++;
                 System.out.println("time: " + time);
             }
         }
@@ -185,6 +202,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
         }
         vis.Close();
     }
+
 
     public void Setup(double initPop, double initRadius) {
         for (int i = 0; i < initPop; i++) {
@@ -351,7 +369,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
 
                     } else if(cell.type == SGM_PACC) {
                             cell.Mutation();
-                            double resistanceThreshold = 20;
+                            double resistanceThreshold = 5;
                             if (cell.resistance > resistanceThreshold) {
                                 cell.Die();
                                 NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
@@ -407,6 +425,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
             //if an output file has been generated, write to it
             RecordOutSize(out, out2);
         }
+
     }
 
     public void RecordOutSize (FileIO writeHere, FileIO writeHere1){
