@@ -2,7 +2,6 @@ package Project;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
 import HAL.GridsAndAgents.AgentGrid2D;
-import HAL.Gui.GifMaker;
 import HAL.Gui.OpenGL2DWindow;
 import HAL.Tools.FileIO;
 import HAL.Tools.Internal.Gaussian;
@@ -106,7 +105,6 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     static int CYTOPLASM = RGB256(255,227,217);
 
     Rand rn = new Rand(System.nanoTime());
-    static String path = "/Users/leelaiyer/Downloads/HAL-master/Outputs/";
     public double SGMPACCPosition = 0;
     public double SGMANEUPosition = 0;
     public double ETPACCPosition = 0;
@@ -130,13 +128,13 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     static double totalResistance = 0;
     FileIO out;
     FileIO out2;
-    OpenGL2DWindow vis;
 
 
     public FinalSGMMutationStrategy(int x, int y, String outFileName, String outFileName2) {
         super(x, y, Cell4.class, true, true);
         out = new FileIO(outFileName, "w");
         out2 = new FileIO(outFileName2,"w");
+
     }
 
     public double facultativeToPACC(double drugDose, double totalResistance) {
@@ -150,41 +148,30 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     public static void main(String[] args) {
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
-        FinalSGMMutationStrategy model = new FinalSGMMutationStrategy(x, y, "TumorDistData.csv", "TumorPopData.csv");
+        FinalSGMMutationStrategy model = new FinalSGMMutationStrategy(x, y, "IntermittentTherapyHighDist1.csv", "IntermittentTherapyHighPop1.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow("SGM and ET Tumor", 700, 700, x, y);
         model.Setup( 200, 2);
         while ((time < 100000)&&(!vis.IsClosed())) {
-            int time2 = 0;
-            for(int i = 0; i < 3; i++) {
-                time2 = 0;
-                while (time2 < 300) {
+                while(time < 200) {
+                    System.out.println("time: " + time);
                     drugDose = 0;
                     CYTOPLASM = RGB256(255, 228, 225);
                     vis.TickPause(0);
                     model.Draw(vis);
                     model.StepCells();
                     model.cellDistanceMethod();
-                    if(time%100 == 0) {
-                        vis.ToPNG(path.concat("img_" + time + ".png"));
-                    }
                     time++;
-                    time2++;
-                    System.out.println("time: " + time);
-                }
-                while (time2 < 600) {
-                    drugDose = 50;
+                } while(time < 2000) {
+                    drugDose = 500;
                     CYTOPLASM = drugCYTOPLASM;
                     vis.TickPause(0);
                     model.Draw(vis);
                     model.StepCells();
                     model.cellDistanceMethod();
-                    if(time%100 == 0) {
-                        vis.ToPNG(path.concat("img_" + time + ".png"));
-                    }                    time++;
-                    time2++;
+                    time++;
                     System.out.println("time: " + time);
-                }
-            } while(time < 2500) {
+            }
+            while(time < 2500) {
                 drugDose = 0;
                 CYTOPLASM = RGB256(255, 228, 225);
                 vis.TickPause(0);
@@ -192,7 +179,6 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
                 model.StepCells();
                 model.cellDistanceMethod();
                 time++;
-                time2++;
                 System.out.println("time: " + time);
             }
         }
@@ -223,7 +209,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     public void Draw(OpenGL2DWindow vis) {
         vis.Clear(WHITE);
         for (Cell4 cell : this) {
-            vis.Circle(cell.Xpt(),cell.Ypt(),cell.radius,CYTOPLASM);
+            vis.Circle(cell.Xpt(),cell.Ypt(),cell.radius, CYTOPLASM);
         }
         for (Cell4 cell : this) {
             vis.Circle(cell.Xpt(), cell.Ypt(), cell.radius / 3, cell.type);
@@ -243,6 +229,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
                 ETAneuPop++;
             }
         }
+
         for(Cell4 cell : this) {
             if(cell.type == SGM_PACC) {
                 double cellDistance = Dist(cell.Xpt(),cell.Ypt(),centerX,centerY);
@@ -262,7 +249,9 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
         ETPACCPosition = ETPACCPosition/ETPACCPop;
         SGMANEUPosition = SGMANEUPosition/SGMAneuPop;
         ETANEUPosition = ETANEUPosition/ETAneuPop;
+
     }
+
     public void StepCells() {
 
         for(Cell4 cell : this){
@@ -369,63 +358,106 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
 
                     } else if(cell.type == SGM_PACC) {
                             cell.Mutation();
-                            double resistanceThreshold = 5;
-                            if (cell.resistance > resistanceThreshold) {
+                            if(drugDose > 0) {
+                                double resistanceThreshold = 50;
+                                if (cell.resistance > resistanceThreshold) {
+                                    cell.Die();
+                                    NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                    double r1 = rn.Double(1);
+                                    if (r1 < 0.25) {
+                                        if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                        }
+                                    } else if (r1 < .5) {
+                                        if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        }
+                                    } else if (r1 < .75) {
+                                        if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        }
+                                    } else {
+                                        if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                        }
+                                    }
+                                }
+                            } else {
                                 cell.Die();
                                 NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                                 double r1 = rn.Double(1);
-                                if(r1 < 0.25) {
-                                    if(cell.Xpt() + 0.1 < xDim - 0.1) {
+                                if (r1 < 0.25) {
+                                    if (cell.Xpt() + 0.1 < xDim - 0.1) {
                                         NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Ypt() + 0.1 < yDim - 0.1){
+                                    } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
                                         NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1){
+                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
                                         NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                    } else if(cell.Ypt() - 0.1 > yDim + 0.1) {
+                                    } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
                                         NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
                                     }
-                                } else if(r1 < .5) {
-                                    if(cell.Ypt() - 0.1 > yDim + 0.1) {
-                                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(SGM_ANEU, cell.resistance);
-                                    } else if(cell.Xpt() + 0.1 < xDim - 0.1) {
-                                        NewAgentPT(cell.Xpt()+0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Ypt() + 0.1 < yDim - 0.1){
-                                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1){
-                                        NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (r1 < .5) {
+                                    if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                        NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                        NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                        NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                        NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                                     }
-                                } else if(r1 < .75) {
-                                    if (cell.Ypt() + 0.1 < yDim - 0.1){
-                                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(SGM_ANEU, cell.resistance);
-                                    } else if(cell.Ypt() - 0.1 > yDim + 0.1) {
-                                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(SGM_ANEU, cell.resistance);
-                                    } else if(cell.Xpt() + 0.1 < xDim - 0.1) {
-                                        NewAgentPT(cell.Xpt()+0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1){
-                                        NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (r1 < .75) {
+                                    if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                        NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                        NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                        NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                        NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                                     }
                                 } else {
-                                    if(cell.Ypt() - 0.1 > yDim + 0.1) {
-                                        NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Ypt() + 0.1 < yDim - 0.1){
-                                        NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(SGM_ANEU, cell.resistance);
-                                    }  else if(cell.Xpt() + 0.1 < xDim - 0.1) {
-                                        NewAgentPT(cell.Xpt()+0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1){
-                                        NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                    if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                        NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                        NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                        NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                    } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                        NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                                     }
                                 }
                             }
-                    }
+                        }
 
+                    }
                 }
             }
-        }
-        if((out!=null)&&(out2 != null)){
-            //if an output file has been generated, write to it
-            RecordOutSize(out, out2);
-        }
-
+        RecordOutSize(out, out2);
     }
 
     public void RecordOutSize (FileIO writeHere, FileIO writeHere1){
@@ -444,6 +476,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
         }
         writeHere.Write(time + "," + ETPACCPosition + "," + SGMPACCPosition + "," + ETANEUPosition + "," + SGMANEUPosition + "\n");
         writeHere1.Write(time + "," + ctPACCET + "," + ctPACCSGM + "," + ctAneuET + "," + ctAneuSGM + "\n");
+
 
     }
 }
