@@ -1,0 +1,1 @@
+Would be useful to have a README that gives some instructions on how to download and run the model, and parameter settings that can be used to replicate some of the simulations performed for your project
