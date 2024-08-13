@@ -1,3 +1,14 @@
+// I would recommend having the parameter values in a separate file. The model would then read the values from the file at runtime.
+// You can ultimately pass the filepath to the model as an argument so you can run multiple versions of the model quickly.
+// for example you can create N different parameter files named file1.txt file2.txt ... fileN.txt
+// then write a command line script that would run:
+// TumorWithSGMandET.jar file1.txt 
+// TumorWithSGMandET.jar file2.txt
+// ...
+// TumorWithSGMandET.jar fileN.txt 
+// all with a single command.
+
+
 package Project.ProjectFirstDraft;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
@@ -20,7 +31,7 @@ class Cell extends SphericalAgent2D <Cell, TumorWithSGMandET> {
         this.type = color;
         this.resistance = resistance + G.totalResistance;
         if (type == TumorWithSGMandET.SGM_PACC) {
-            this.radius = 0.57;
+            this.radius = 0.57; // candidates to be in a parameter file
         } else if (type == TumorWithSGMandET.SGM_ANEU) {
             this.radius = 0.4;
         } else if (type == TumorWithSGMandET.ET_PACC) {
@@ -38,10 +49,12 @@ class Cell extends SphericalAgent2D <Cell, TumorWithSGMandET> {
     }
 
     public void CalcMove() {
+        // what is this 1.14? Is it a parameter?
         forceSum = SumForces(1.14, this::ForceCalc);
     }
 
     public boolean CanDivide(double div_bias,double inhib_weight) {
+        // describe this in the methods.
         return G.rn.Double()<Math.tanh(div_bias-forceSum*inhib_weight);
     }
 
@@ -73,7 +86,7 @@ class Cell extends SphericalAgent2D <Cell, TumorWithSGMandET> {
         if((type == TumorWithSGMandET.ET_ANEU)||(type == TumorWithSGMandET.ET_PACC)) {
             boolean mutated;
             if((options < 0)||(TumorWithSGMandET.deathDueToDrug(TumorWithSGMandET.drugDose, resistance) > TumorWithSGMandET.fitnessThreshold)) {
-                mutated = mutationChance < 0.7;
+                mutated = mutationChance < 0.7; // parameter
             } else {
                 if(mutationChance < 0.3) {
                     mutated = true;
@@ -83,8 +96,8 @@ class Cell extends SphericalAgent2D <Cell, TumorWithSGMandET> {
             }
              if (mutated) {
                 double favorability = G.rn.Double(1);
-                if (favorability > 0.9) {
-                    double resistanceAdded = G.rn.Double(100);
+                if (favorability > 0.9) { // parameter
+                    double resistanceAdded = G.rn.Double(100); // is this 100 a parameter?
                     resistance += resistanceAdded;
                 }
             }
@@ -99,10 +112,11 @@ class Cell extends SphericalAgent2D <Cell, TumorWithSGMandET> {
                     }
                 }
             } else {
-                double resistanceThreshold = G.rn.Double( 1000);
+                // Unclear on the logic of why resistance threshold is randomly generated each time. Why not have it fixed?
+                double resistanceThreshold = G.rn.Double( 1000); // resistance threshold is a parameter?
                 while(resistance < resistanceThreshold) {
                     double favorability = G.rn.Double(1);
-                    if (favorability > 0.8) {
+                    if (favorability > 0.8) { // the 0.8 is a parameter? And why different to the value of 0.9 used above?
                         double resistanceAdded = G.rn.Double(1000);
                         resistance += resistanceAdded;
                     }
@@ -123,6 +137,8 @@ public class TumorWithSGMandET extends AgentGrid2D <Cell> {
     static int CYTOPLASM = RGB256(255,227,217);
 
     Rand rn = new Rand(System.nanoTime());
+    // several parameters below (should be described in methods).
+    // Also candidates for sensitivity analysis.
     double FORCE_SCALER = .25;
     double FRICTION = .4;
     double PACC_DIV_BIAS = 0.02;
@@ -147,12 +163,12 @@ public class TumorWithSGMandET extends AgentGrid2D <Cell> {
     }
 
     public double facultativeToPACC(double drugDose, double totalResistance) {
-        double facultative = 0.7*(drugDose/(100+totalResistance));
+        double facultative = 0.7*(drugDose/(100+totalResistance)); // this 0.7 and 100 are parameters.
         return facultative;
     }
 
     public static double deathDueToDrug(double drugDose,  double totalResistance) {
-        double death = drugDose/(100 + totalResistance);
+        double death = drugDose/(100 + totalResistance); // the 100 is a parameter.
         return death;
     }
 
@@ -164,7 +180,8 @@ public class TumorWithSGMandET extends AgentGrid2D <Cell> {
         model.Setup( 200, 5);
         int i = 0;
         while ((time < 100000)&&(!vis.IsClosed())) {
-                while(time < 300) {
+                while(time < 300) { // it would be handy to have drug scheduling in a separate file, which can be then read by 
+                    // the model at runtime. Then you can quickly run different model scenarios only by changing the input file.
                     drugDose = 0;
                     vis.TickPause(0);
                     model.Draw(vis);
@@ -227,12 +244,22 @@ public class TumorWithSGMandET extends AgentGrid2D <Cell> {
             cell.Move();
         }
         for (Cell cell : this) {
+
             double logistic = 0.6;
             double obligate = 0.02;
             double facultative = facultativeToPACC(drugDose, cell.resistance);
             double death = deathDueToDrug(drugDose, cell.resistance);
             double depoly = 0.4;
-            double nothing = rn.Double(0.5);
+            // I don't think this is the best way to implement "doing nothing". 
+            // I would favour an interpretation where the above are probabilities per unit time. 
+            // In this case the probability of nothing happening is calculable - it is the joint probability that none of the above events occur
+            // i.e. double nothing = (1-logistic)*(1-obligate)*(1-)...etc. 
+            double nothing = rn.Double(0.5); 
+            // Under that interpretation I would then decide right here whether something happens or not:
+            // bool has_something_happened = rn.Double()<nothing;
+            // If nothing has happened i would skip straight to the next cell:
+            // if(!has_something_happened) break; (or whatever the command is in java)
+            // else {// code for all the other events here}
 
         if(((cell.type == ET_ANEU)||(cell.type == SGM_ANEU))&&(cell.CanDivide(ANEU_DIV_BIAS,ANEU_INHIB_WEIGHT))) {
             if(cell.type == ET_ANEU) {
