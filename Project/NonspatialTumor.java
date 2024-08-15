@@ -1,3 +1,5 @@
+// rather than have a separate model file for different tests, it would be more streamlined to have a single master file which can load various parameter files to test different scenarios
+
 package Project;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
