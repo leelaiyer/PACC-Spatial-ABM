@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import static HAL.Util.*;
 
 class CellFinal extends SphericalAgent2D<CellFinal, ProjectContinuation> {
+
     int type;
     double resistance;
     double forceSum;
-    final double firstMutationChance = 0.7;
-    final double secondMutation = 1 - firstMutationChance;
-    final double favorabilityChecker = 0.9;
+
 
     public void Init(int color, double resistance) {
         this.type = color;
@@ -81,21 +80,20 @@ class CellFinal extends SphericalAgent2D<CellFinal, ProjectContinuation> {
         double mutationChance = G.rn.Double(1);
         boolean mutated;
         if ((options < 0) || (ProjectContinuation.deathDueToDrug(ProjectContinuation.drugDose, resistance) > ProjectContinuation.fitnessThreshold)) {
-            if (mutationChance < firstMutationChance) {
+            if (mutationChance < ProjectContinuation.firstMutationChance) {
                 mutated = true;
             } else {
                 mutated = false;
             }
         } else {
-            if (mutationChance < secondMutation) {
+            if (mutationChance < ProjectContinuation.secondMutation) {
                 mutated = true;
             } else {
                 mutated = false;
             }
         }
         if (mutated) {
-            double favorability = 0.7;
-            if (favorability > favorabilityChecker) {
+            if (G.rn.Double(1) > ProjectContinuation.favorability) {
                 double resistanceAdded = G.rn.Double(100);
                 resistance += resistanceAdded;
             }
@@ -104,7 +102,6 @@ class CellFinal extends SphericalAgent2D<CellFinal, ProjectContinuation> {
 }
 
 public class ProjectContinuation extends AgentGrid2D<CellFinal> {
-
     static final int WHITE = RGB256(248, 255, 252);
     static final int ET_PACC = RGB256(155, 155, 235);
     static final int ET_ANEU = RGB256(18, 148, 144);
@@ -113,6 +110,17 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     static int drugCYTOPLASM = RGB256(240,177,177);
     static int CYTOPLASM = RGB256(255,227,217);
 
+    public double FORCE_SCALER = 0;
+    public double FRICTION = 0;
+    public double PACC_DIV_BIAS = 0;
+    public double ANEU_DIV_BIAS = 0;
+    public double PACC_INHIB_WEIGHT = 0;
+    public double ANEU_INHIB_WEIGHT = 0;
+    public static int fitnessThreshold = 0;
+    public static double firstMutationChance = 0;
+    public static double secondMutation = 0;
+    public static double favorability = 0;
+
     Rand rn = new Rand(System.nanoTime());
     public double SGMPACCPosition = 0;
     public double SGMANEUPosition = 0;
@@ -120,14 +128,6 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     public double ETANEUPosition = 0;
     public double centerX = xDim/2;
     public double centerY = yDim/2;
-
-    double FORCE_SCALER = .25;
-    double FRICTION = 0.5;
-    double PACC_DIV_BIAS = 0.02;
-    double ANEU_DIV_BIAS = 0.01;
-    double PACC_INHIB_WEIGHT = 0.05;
-    double ANEU_INHIB_WEIGHT = 0.02;
-    public static int fitnessThreshold = 50;
 
     public static int time = 0;
     public static double drugDose = 0;
@@ -141,14 +141,34 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     FileIO out;
     FileIO out2;
 
-
     public ProjectContinuation(int x, int y, String outFileName, String outFileName2) {
         super(x, y, CellFinal.class, true, true);
         out = new FileIO(outFileName, "w");
         out2 = new FileIO(outFileName2,"w");
-
     }
+    public void setParameters () {
+        try {
+            String configFilePath = "/Users/leelaiyer/Downloads/HAL-master/Project/config.properties";
+            FileInputStream propsInput = new FileInputStream(configFilePath);
+            Properties prop = new Properties();
+            prop.load(propsInput);
+            FORCE_SCALER = Double.parseDouble(prop.getProperty("FORCE_SCALER"));
+            FRICTION = Double.parseDouble(prop.getProperty("FRICTION"));
+            PACC_DIV_BIAS = Double.parseDouble(prop.getProperty("PACC_DIV_BIAS"));
+            ANEU_DIV_BIAS = Double.parseDouble(prop.getProperty("ANEU_DIV_BIAS"));
+            PACC_INHIB_WEIGHT = Double.parseDouble(prop.getProperty("PACC_INHIB_WEIGHT"));
+            ANEU_INHIB_WEIGHT = Double.parseDouble(prop.getProperty("ANEU_INHIB_WEIGHT"));
+            fitnessThreshold = Integer.parseInt(prop.getProperty("fitnessThreshold"));
+            firstMutationChance = Double.parseDouble(prop.getProperty("firstMutationChance"));
+            secondMutation = Double.parseDouble(prop.getProperty("secondMutationChance"));
+            favorability = Double.parseDouble(prop.getProperty("favorability"));
 
+        } catch (FileNotFoundException e){
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public double facultativeToPACC(double facultativeParameter, double drugDose, double totalResistance) {
         return facultativeParameter*(drugDose/(100+totalResistance));
     }
@@ -158,10 +178,12 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     }
 
     public static void main(String[] args) {
+
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
         ProjectContinuation model = new ProjectContinuation(x, y, "IntermittentTherapyHighDist1.csv", "IntermittentTherapyHighPop1.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow ("SGM and ET Tumor", 700, 700, x, y);
+        model.setParameters();
         model.Setup( 200, 2);
         while ((time < 100000)&&(!vis.IsClosed())) {
             while(time < 200) {
@@ -266,14 +288,14 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
 
     public void StepCells() {
         try {
-            String configFilePath = "src/config.properties";
+            String configFilePath = "/Users/leelaiyer/Downloads/HAL-master/Project/config.properties";
             FileInputStream propsInput = new FileInputStream(configFilePath);
             Properties prop = new Properties();
             prop.load(propsInput);
 
         double logistic = Double.parseDouble(prop.getProperty("logistic"));
         double obligate = Double.parseDouble(prop.getProperty("obligate"));
-        double facultativeParameter = Double.parseDouble(prop.getProperty("facultativeParameter"));
+        double facultativeParameter = Double.parseDouble(prop.getProperty("facultative"));
         double depoly = Double.parseDouble(prop.getProperty("depoly"));
         double nothing = rn.Double(0.5);
         double resistanceThreshold = Double.parseDouble(prop.getProperty("resistanceThreshold"));
