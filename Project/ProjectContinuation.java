@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import static HAL.Util.*;
 
-class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy> {
+class CellFinal extends SphericalAgent2D<CellFinal, ProjectContinuation> {
     int type;
     double resistance;
     double forceSum;
@@ -25,20 +25,20 @@ class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy> {
     public void Init(int color, double resistance) {
         this.type = color;
         this.resistance = resistance + G.totalResistance;
-        if (type == FinalSGMMutationStrategy.SGM_PACC) {
+        if (type == ProjectContinuation.SGM_PACC) {
             this.radius = 0.15;
-        } else if (type == FinalSGMMutationStrategy.SGM_ANEU) {
+        } else if (type == ProjectContinuation.SGM_ANEU) {
             this.radius = 0.1;
-        } else if (type == FinalSGMMutationStrategy.ET_PACC) {
+        } else if (type == ProjectContinuation.ET_PACC) {
             this.radius = 0.15;
-        } else if (type == FinalSGMMutationStrategy.ET_ANEU) {
+        } else if (type == ProjectContinuation.ET_ANEU) {
             this.radius = 0.1;
         } else {
             System.out.println("different cell");
         }
     }
 
-    double ForceCalc(double overlap, Cell4 other) {
+    double ForceCalc(double overlap, CellFinal other) {
         if(overlap < 0) {
             return 0;
         }
@@ -60,14 +60,14 @@ class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy> {
     }
 
     public void Div() {
-        if (type == FinalSGMMutationStrategy.SGM_PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.SGM_PACC, resistance);
-        } else if(type == FinalSGMMutationStrategy.SGM_ANEU) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.SGM_ANEU, resistance);
-        } else if(type == FinalSGMMutationStrategy.ET_PACC) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.ET_PACC, resistance);
-        } else if(type == FinalSGMMutationStrategy.ET_ANEU) {
-            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(FinalSGMMutationStrategy.ET_ANEU, resistance);
+        if (type == ProjectContinuation.SGM_PACC) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(ProjectContinuation.SGM_PACC, resistance);
+        } else if(type == ProjectContinuation.SGM_ANEU) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(ProjectContinuation.SGM_ANEU, resistance);
+        } else if(type == ProjectContinuation.ET_PACC) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(ProjectContinuation.ET_PACC, resistance);
+        } else if(type == ProjectContinuation.ET_ANEU) {
+            Divide(radius*2.0/3.0, G.divCoordStorage, G.rn).Init(ProjectContinuation.ET_ANEU, resistance);
         }
     }
 
@@ -80,7 +80,7 @@ class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy> {
         int options = MapEmptyHood(neighborhood);
         double mutationChance = G.rn.Double(1);
         boolean mutated;
-        if ((options < 0) || (FinalSGMMutationStrategy.deathDueToDrug(FinalSGMMutationStrategy.drugDose, resistance) > FinalSGMMutationStrategy.fitnessThreshold)) {
+        if ((options < 0) || (ProjectContinuation.deathDueToDrug(ProjectContinuation.drugDose, resistance) > ProjectContinuation.fitnessThreshold)) {
             if (mutationChance < firstMutationChance) {
                 mutated = true;
             } else {
@@ -94,7 +94,7 @@ class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy> {
             }
         }
         if (mutated) {
-            double favorability = G.rn.Double(1);
+            double favorability = 0.7;
             if (favorability > favorabilityChecker) {
                 double resistanceAdded = G.rn.Double(100);
                 resistance += resistanceAdded;
@@ -103,7 +103,7 @@ class Cell4 extends SphericalAgent2D<Cell4, FinalSGMMutationStrategy> {
     }
 }
 
-public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
+public class ProjectContinuation extends AgentGrid2D<CellFinal> {
 
     static final int WHITE = RGB256(248, 255, 252);
     static final int ET_PACC = RGB256(155, 155, 235);
@@ -127,12 +127,12 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     double ANEU_DIV_BIAS = 0.01;
     double PACC_INHIB_WEIGHT = 0.05;
     double ANEU_INHIB_WEIGHT = 0.02;
+    public static int fitnessThreshold = 50;
 
     public static int time = 0;
     public static double drugDose = 0;
-    public static int fitnessThreshold = 50;
 
-    ArrayList<Cell4> neighborList = new ArrayList<>();
+    ArrayList<CellFinal> neighborList = new ArrayList<>();
     ArrayList<double[]> neighborInfo = new ArrayList<>();
     double[] divCoordStorage = new double[2];
     Rand r3 = new Rand(0);
@@ -142,15 +142,15 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     FileIO out2;
 
 
-    public FinalSGMMutationStrategy(int x, int y, String outFileName, String outFileName2) {
-        super(x, y, Cell4.class, true, true);
+    public ProjectContinuation(int x, int y, String outFileName, String outFileName2) {
+        super(x, y, CellFinal.class, true, true);
         out = new FileIO(outFileName, "w");
         out2 = new FileIO(outFileName2,"w");
 
     }
 
-    public double facultativeToPACC(double drugDose, double totalResistance) {
-        return 0.7*(drugDose/(100+totalResistance));
+    public double facultativeToPACC(double facultativeParameter, double drugDose, double totalResistance) {
+        return facultativeParameter*(drugDose/(100+totalResistance));
     }
 
     public static double deathDueToDrug(double drugDose,  double totalResistance) {
@@ -160,28 +160,28 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     public static void main(String[] args) {
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
-        FinalSGMMutationStrategy model = new FinalSGMMutationStrategy(x, y, "IntermittentTherapyHighDist1.csv", "IntermittentTherapyHighPop1.csv");
+        ProjectContinuation model = new ProjectContinuation(x, y, "IntermittentTherapyHighDist1.csv", "IntermittentTherapyHighPop1.csv");
         OpenGL2DWindow vis = new OpenGL2DWindow ("SGM and ET Tumor", 700, 700, x, y);
         model.Setup( 200, 2);
         while ((time < 100000)&&(!vis.IsClosed())) {
-                while(time < 200) {
-                    System.out.println("time: " + time);
-                    drugDose = 0;
-                    CYTOPLASM = RGB256(255, 228, 225);
-                    vis.TickPause(0);
-                    model.Draw(vis);
-                    model.StepCells();
-                    model.cellDistanceMethod();
-                    time++;
-                } while(time < 2000) {
-                    drugDose = 500;
-                    CYTOPLASM = drugCYTOPLASM;
-                    vis.TickPause(0);
-                    model.Draw(vis);
-                    model.StepCells();
-                    model.cellDistanceMethod();
-                    time++;
-                    System.out.println("time: " + time);
+            while(time < 200) {
+                System.out.println("time: " + time);
+                drugDose = 0;
+                CYTOPLASM = RGB256(255, 228, 225);
+                vis.TickPause(0);
+                model.Draw(vis);
+                model.StepCells();
+                model.cellDistanceMethod();
+                time++;
+            } while(time < 2000) {
+                drugDose = 500;
+                CYTOPLASM = drugCYTOPLASM;
+                vis.TickPause(0);
+                model.Draw(vis);
+                model.StepCells();
+                model.cellDistanceMethod();
+                time++;
+                System.out.println("time: " + time);
             }
             while(time < 2500) {
                 drugDose = 0;
@@ -220,17 +220,17 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
 
     public void Draw(OpenGL2DWindow vis) {
         vis.Clear(WHITE);
-        for (Cell4 cell : this) {
+        for (CellFinal cell : this) {
             vis.Circle(cell.Xpt(),cell.Ypt(),cell.radius, CYTOPLASM);
         }
-        for (Cell4 cell : this) {
+        for (CellFinal cell : this) {
             vis.Circle(cell.Xpt(), cell.Ypt(), cell.radius / 3, cell.type);
         }
         vis.Update();
     }
     public void cellDistanceMethod () {
         int SGMPACCPop = 0, ETPACCPop = 0, SGMAneuPop = 0, ETAneuPop = 0;
-        for(Cell4 cell : this) {
+        for(CellFinal cell : this) {
             if(cell.type == SGM_PACC){
                 SGMPACCPop++;
             } else if(cell.type == ET_PACC) {
@@ -242,7 +242,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
             }
         }
 
-        for(Cell4 cell : this) {
+        for(CellFinal cell : this) {
             if(cell.type == SGM_PACC) {
                 double cellDistance = Dist(cell.Xpt(),cell.Ypt(),centerX,centerY);
                 SGMPACCPosition += cellDistance;
@@ -265,20 +265,27 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
     }
 
     public void StepCells() {
+        try {
+            String configFilePath = "src/config.properties";
+            FileInputStream propsInput = new FileInputStream(configFilePath);
+            Properties prop = new Properties();
+            prop.load(propsInput);
 
-        for(Cell4 cell : this){
+        double logistic = Double.parseDouble(prop.getProperty("logistic"));
+        double obligate = Double.parseDouble(prop.getProperty("obligate"));
+        double facultativeParameter = Double.parseDouble(prop.getProperty("facultativeParameter"));
+        double depoly = Double.parseDouble(prop.getProperty("depoly"));
+        double nothing = rn.Double(0.5);
+        double resistanceThreshold = Double.parseDouble(prop.getProperty("resistanceThreshold"));
+
+        for(CellFinal cell : this){
             cell.CalcMove();
-        } for(Cell4 cell : this) {
+        } for(CellFinal cell : this) {
             cell.Move();
         }
-        for (Cell4 cell : this) {
-            double logistic = 0.6;
-            double obligate = 0.02;
-            double facultative = facultativeToPACC(drugDose, cell.resistance);
+        for (CellFinal cell : this) {
+            double facultative = facultativeToPACC(facultativeParameter, drugDose, cell.resistance);
             double death = deathDueToDrug(drugDose, cell.resistance);
-            double depoly = 0.6;
-            double nothing = rn.Double(0.5);
-
             if(((cell.type == ET_ANEU)||(cell.type == SGM_ANEU))&&(cell.CanDivide(ANEU_DIV_BIAS,ANEU_INHIB_WEIGHT))) {
                 double[] eventsAneu = {logistic, death, obligate, facultative, nothing};
                 double[] eventPercentagesAneu = new double[eventsAneu.length];
@@ -347,7 +354,7 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
                                 NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
                             }
                         } else if(r1 < .75) {
-                             if (cell.Ypt() + 0.1 < yDim - 0.1){
+                            if (cell.Ypt() + 0.1 < yDim - 0.1){
                                 NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(ET_ANEU, cell.resistance);
                             } else if(cell.Ypt() - 0.1 > yDim + 0.1) {
                                 NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(ET_ANEU, cell.resistance);
@@ -369,56 +376,9 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
                         }
 
                     } else if(cell.type == SGM_PACC) {
-                            cell.Mutation();
-                            if(drugDose > 0) {
-                                double resistanceThreshold = 50;
-                                if (cell.resistance > resistanceThreshold) {
-                                    cell.Die();
-                                    NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                    double r1 = rn.Double(1);
-                                    if (r1 < 0.25) {
-                                        if (cell.Xpt() + 0.1 < xDim - 0.1) {
-                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
-                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
-                                        }
-                                    } else if (r1 < .5) {
-                                        if (cell.Ypt() - 0.1 > yDim + 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
-                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
-                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        }
-                                    } else if (r1 < .75) {
-                                        if (cell.Ypt() + 0.1 < yDim - 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
-                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
-                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        }
-                                    } else {
-                                        if (cell.Ypt() - 0.1 > yDim + 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
-                                            NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
-                                            NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
-                                            NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
-                                        }
-                                    }
-                                }
-                            } else {
+                        cell.Mutation();
+                        if(drugDose > 0) {
+                            if (cell.resistance > resistanceThreshold) {
                                 cell.Die();
                                 NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
                                 double r1 = rn.Double(1);
@@ -464,17 +424,68 @@ public class FinalSGMMutationStrategy extends AgentGrid2D<Cell4> {
                                     }
                                 }
                             }
+                        } else {
+                            cell.Die();
+                            NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                            double r1 = rn.Double(1);
+                            if (r1 < 0.25) {
+                                if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                    NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                    NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                }
+                            } else if (r1 < .5) {
+                                if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                    NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                    NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                }
+                            } else if (r1 < .75) {
+                                if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                    NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                    NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                }
+                            } else {
+                                if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                    NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                    NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                    NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(SGM_ANEU, cell.resistance);
+                                }
+                            }
                         }
                     }
                 }
             }
+        }
+        } catch (FileNotFoundException e){
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         RecordOutSize(out, out2);
     }
 
     public void RecordOutSize (FileIO writeHere, FileIO writeHere1){
         int ctPACCSGM = 0, ctPACCET = 0, ctAneuSGM = 0, ctAneuET = 0;
 
-        for (Cell4 cell : this) {
+        for (CellFinal cell : this) {
             if (cell.type == ET_PACC) {
                 ctPACCET++;
             } else if(cell.type == SGM_PACC){
