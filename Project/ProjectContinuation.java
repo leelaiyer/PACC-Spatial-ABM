@@ -149,7 +149,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     }
     public void setParameters () {
         try {
-            String configFilePath = "/Users/leelaiyer/Downloads/HAL-master/Project/config.properties";
+            String configFilePath = "/Users/leelaiyer/Desktop/HAL-master/Project/config.properties";
             FileInputStream propsInput = new FileInputStream(configFilePath);
             Properties prop = new Properties();
             prop.load(propsInput);
@@ -183,7 +183,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
         try {
-            String configFilePath = "/Users/leelaiyer/Downloads/HAL-master/Project/config.properties";
+            String configFilePath = "/Users/leelaiyer/Desktop/HAL-master/Project/config.properties";
             FileInputStream propsInput = new FileInputStream(configFilePath);
             Properties prop = new Properties();
             prop.load(propsInput);
@@ -302,7 +302,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
 
     public void StepCells() {
         try {
-            String configFilePath = "/Users/leelaiyer/Downloads/HAL-master/Project/config.properties";
+            String configFilePath = "/Users/leelaiyer/Desktop/HAL-master/Project/config.properties";
             FileInputStream propsInput = new FileInputStream(configFilePath);
             Properties prop = new Properties();
             prop.load(propsInput);
