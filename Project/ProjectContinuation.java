@@ -20,7 +20,6 @@ class CellFinal extends SphericalAgent2D<CellFinal, ProjectContinuation> {
     double resistance;
     double forceSum;
 
-
     public void Init(int color, double resistance) {
         this.type = color;
         this.resistance = resistance + G.totalResistance;
@@ -120,6 +119,8 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     public static double firstMutationChance = 0;
     public static double secondMutation = 0;
     public static double favorability = 0;
+    public static String distanceFileName = "";
+    public static String populationFileName = "";
 
     Rand rn = new Rand(System.nanoTime());
     public double SGMPACCPosition = 0;
@@ -181,7 +182,15 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
 
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
-        ProjectContinuation model = new ProjectContinuation(x, y, "IntermittentTherapyHighDist1.csv", "IntermittentTherapyHighPop1.csv");
+        try {
+            String configFilePath = "/Users/leelaiyer/Downloads/HAL-master/Project/config.properties";
+            FileInputStream propsInput = new FileInputStream(configFilePath);
+            Properties prop = new Properties();
+            prop.load(propsInput);
+            distanceFileName = prop.getProperty("distanceFileName");
+            populationFileName = prop.getProperty("populationFileName");
+
+        ProjectContinuation model = new ProjectContinuation(x, y, distanceFileName, populationFileName);
         OpenGL2DWindow vis = new OpenGL2DWindow ("SGM and ET Tumor", 700, 700, x, y);
         model.setParameters();
         model.Setup( 200, 2);
@@ -221,6 +230,11 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
             model.out2.Close();
         }
         vis.Close();
+        } catch (FileNotFoundException e){
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
