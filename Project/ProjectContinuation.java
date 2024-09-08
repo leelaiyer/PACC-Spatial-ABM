@@ -109,6 +109,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     static int drugCYTOPLASM = RGB256(240,177,177);
     static int CYTOPLASM = RGB256(255,227,217);
 
+    // properties
     public double FORCE_SCALER = 0;
     public double FRICTION = 0;
     public double PACC_DIV_BIAS = 0;
@@ -139,37 +140,31 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     Rand r3 = new Rand(0);
     Gaussian gaussian = new Gaussian();
     static double totalResistance = 0;
+
+    Properties props;
     FileIO out;
     FileIO out2;
 
-    public ProjectContinuation(int x, int y, String outFileName, String outFileName2) {
+    public ProjectContinuation(int x, int y, Properties props) {
         super(x, y, CellFinal.class, true, true);
-        out = new FileIO(outFileName, "w");
-        out2 = new FileIO(outFileName2,"w");
-    }
-    public void setParameters () {
-        try {
-            String configFilePath = "/Users/leelaiyer/Desktop/HAL-master/Project/config.properties";
-            FileInputStream propsInput = new FileInputStream(configFilePath);
-            Properties prop = new Properties();
-            prop.load(propsInput);
-            FORCE_SCALER = Double.parseDouble(prop.getProperty("FORCE_SCALER"));
-            FRICTION = Double.parseDouble(prop.getProperty("FRICTION"));
-            PACC_DIV_BIAS = Double.parseDouble(prop.getProperty("PACC_DIV_BIAS"));
-            ANEU_DIV_BIAS = Double.parseDouble(prop.getProperty("ANEU_DIV_BIAS"));
-            PACC_INHIB_WEIGHT = Double.parseDouble(prop.getProperty("PACC_INHIB_WEIGHT"));
-            ANEU_INHIB_WEIGHT = Double.parseDouble(prop.getProperty("ANEU_INHIB_WEIGHT"));
-            fitnessThreshold = Integer.parseInt(prop.getProperty("fitnessThreshold"));
-            firstMutationChance = Double.parseDouble(prop.getProperty("firstMutationChance"));
-            secondMutation = Double.parseDouble(prop.getProperty("secondMutationChance"));
-            favorability = Double.parseDouble(prop.getProperty("favorability"));
 
-        } catch (FileNotFoundException e){
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.props = props;
+        out = new FileIO(props.getProperty("distanceFileName"), "w");
+        out2 = new FileIO(props.getProperty("populationFileName"),"w");
+
+        FORCE_SCALER = Double.parseDouble(props.getProperty("FORCE_SCALER"));
+        FRICTION = Double.parseDouble(props.getProperty("FRICTION"));
+        PACC_DIV_BIAS = Double.parseDouble(props.getProperty("PACC_DIV_BIAS"));
+        ANEU_DIV_BIAS = Double.parseDouble(props.getProperty("ANEU_DIV_BIAS"));
+        PACC_INHIB_WEIGHT = Double.parseDouble(props.getProperty("PACC_INHIB_WEIGHT"));
+        ANEU_INHIB_WEIGHT = Double.parseDouble(props.getProperty("ANEU_INHIB_WEIGHT"));
+        fitnessThreshold = Integer.parseInt(props.getProperty("fitnessThreshold"));
+        firstMutationChance = Double.parseDouble(props.getProperty("firstMutationChance"));
+        secondMutation = Double.parseDouble(props.getProperty("secondMutationChance"));
+        favorability = Double.parseDouble(props.getProperty("favorability"));
+
     }
+
     public double facultativeToPACC(double facultativeParameter, double drugDose, double totalResistance) {
         return facultativeParameter*(drugDose/(100+totalResistance));
     }
@@ -179,57 +174,54 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     }
 
     public static void main(String[] args) {
-
         OpenGL2DWindow.MakeMacCompatible(args);
         int x = 30, y = 30;
         try {
-            String configFilePath = "/Users/leelaiyer/Desktop/HAL-master/Project/config.properties";
+            String configFilePath = System.getenv("propertiesFilePath");
             FileInputStream propsInput = new FileInputStream(configFilePath);
-            Properties prop = new Properties();
-            prop.load(propsInput);
-            distanceFileName = prop.getProperty("distanceFileName");
-            populationFileName = prop.getProperty("populationFileName");
+            Properties props = new Properties();
+            props.load(propsInput);
 
-        ProjectContinuation model = new ProjectContinuation(x, y, distanceFileName, populationFileName);
-        OpenGL2DWindow vis = new OpenGL2DWindow ("SGM and ET Tumor", 700, 700, x, y);
-        model.setParameters();
-        model.Setup( 200, 2);
-        while ((time < 100000)&&(!vis.IsClosed())) {
-            while(time < 200) {
-                System.out.println("time: " + time);
-                drugDose = 0;
-                CYTOPLASM = RGB256(255, 228, 225);
-                vis.TickPause(0);
-                model.Draw(vis);
-                model.StepCells();
-                model.cellDistanceMethod();
-                time++;
-            } while(time < 2000) {
-                drugDose = 500;
-                CYTOPLASM = drugCYTOPLASM;
-                vis.TickPause(0);
-                model.Draw(vis);
-                model.StepCells();
-                model.cellDistanceMethod();
-                time++;
-                System.out.println("time: " + time);
+            ProjectContinuation model = new ProjectContinuation(x, y, props);
+            OpenGL2DWindow vis = new OpenGL2DWindow ("SGM and ET Tumor", 700, 700, x, y);
+
+            model.Setup( 200, 2);
+            while ((time < 100000)&&(!vis.IsClosed())) {
+                while(time < 200) {
+                    System.out.println("time: " + time);
+                    drugDose = 0;
+                    CYTOPLASM = RGB256(255, 228, 225);
+                    vis.TickPause(0);
+                    model.Draw(vis);
+                    model.StepCells(props);
+                    model.cellDistanceMethod();
+                    time++;
+                } while(time < 2000) {
+                    drugDose = 500;
+                    CYTOPLASM = drugCYTOPLASM;
+                    vis.TickPause(0);
+                    model.Draw(vis);
+                    model.StepCells(props);
+                    model.cellDistanceMethod();
+                    time++;
+                    System.out.println("time: " + time);
+                }
+                while(time < 2500) {
+                    drugDose = 0;
+                    CYTOPLASM = RGB256(255, 228, 225);
+                    vis.TickPause(0);
+                    model.Draw(vis);
+                    model.StepCells(props);
+                    model.cellDistanceMethod();
+                    time++;
+                    System.out.println("time: " + time);
+                }
             }
-            while(time < 2500) {
-                drugDose = 0;
-                CYTOPLASM = RGB256(255, 228, 225);
-                vis.TickPause(0);
-                model.Draw(vis);
-                model.StepCells();
-                model.cellDistanceMethod();
-                time++;
-                System.out.println("time: " + time);
+            if ((model.out != null)||(model.out2 != null)) {
+                model.out.Close();
+                model.out2.Close();
             }
-        }
-        if ((model.out != null)||(model.out2 != null)) {
-            model.out.Close();
-            model.out2.Close();
-        }
-        vis.Close();
+            vis.Close();
         } catch (FileNotFoundException e){
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -300,19 +292,13 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
 
     }
 
-    public void StepCells() {
-        try {
-            String configFilePath = "/Users/leelaiyer/Desktop/HAL-master/Project/config.properties";
-            FileInputStream propsInput = new FileInputStream(configFilePath);
-            Properties prop = new Properties();
-            prop.load(propsInput);
-
-        double logistic = Double.parseDouble(prop.getProperty("logistic"));
-        double obligate = Double.parseDouble(prop.getProperty("obligate"));
-        double facultativeParameter = Double.parseDouble(prop.getProperty("facultative"));
-        double depoly = Double.parseDouble(prop.getProperty("depoly"));
+    public void StepCells(Properties props) {
+        double logistic = Double.parseDouble(props.getProperty("logistic"));
+        double obligate = Double.parseDouble(props.getProperty("obligate"));
+        double facultativeParameter = Double.parseDouble(props.getProperty("facultative"));
+        double depoly = Double.parseDouble(props.getProperty("depoly"));
         double nothing = rn.Double(0.5);
-        double resistanceThreshold = Double.parseDouble(prop.getProperty("resistanceThreshold"));
+        double resistanceThreshold = Double.parseDouble(props.getProperty("resistanceThreshold"));
 
         for(CellFinal cell : this){
             cell.CalcMove();
@@ -322,98 +308,98 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
         for (CellFinal cell : this) {
             double facultative = facultativeToPACC(facultativeParameter, drugDose, cell.resistance);
             double death = deathDueToDrug(drugDose, cell.resistance);
-            if(((cell.type == ET_ANEU)||(cell.type == SGM_ANEU))&&(cell.CanDivide(ANEU_DIV_BIAS,ANEU_INHIB_WEIGHT))) {
+            if (((cell.type == ET_ANEU) || (cell.type == SGM_ANEU)) && (cell.CanDivide(ANEU_DIV_BIAS, ANEU_INHIB_WEIGHT))) {
                 double[] eventsAneu = {logistic, death, obligate, facultative, nothing};
                 double[] eventPercentagesAneu = new double[eventsAneu.length];
                 double sum = logistic + obligate + facultative + death + nothing;
-                for(int i = 0; i < eventsAneu.length; i++) {
-                    eventPercentagesAneu[i] = (eventsAneu[i]/sum);
+                for (int i = 0; i < eventsAneu.length; i++) {
+                    eventPercentagesAneu[i] = (eventsAneu[i] / sum);
                 }
                 double[] eventProbabilitiesAneu = new double[eventsAneu.length];
                 eventProbabilitiesAneu[0] = eventPercentagesAneu[0];
-                for(int i = 1; i < eventsAneu.length; i++) {
-                    eventProbabilitiesAneu[i] = eventProbabilitiesAneu[i-1] + eventPercentagesAneu[i];
+                for (int i = 1; i < eventsAneu.length; i++) {
+                    eventProbabilitiesAneu[i] = eventProbabilitiesAneu[i - 1] + eventPercentagesAneu[i];
                 }
                 double r = rn.Double(1);
 
                 if (r < eventProbabilitiesAneu[0]) {
                     cell.Mutation();
                     cell.Div();
-                } else if((r < eventProbabilitiesAneu[1])&&(eventsAneu[1] != 0)) {
+                } else if ((r < eventProbabilitiesAneu[1]) && (eventsAneu[1] != 0)) {
                     cell.Die();
-                } else if((r < eventProbabilitiesAneu[2])||(r < eventProbabilitiesAneu[3])) {
+                } else if ((r < eventProbabilitiesAneu[2]) || (r < eventProbabilitiesAneu[3])) {
                     cell.Die();
-                    if(cell.type == ET_ANEU) {
-                        NewAgentPT(cell.Xpt(),cell.Ypt()).Init(ET_PACC, cell.resistance);
+                    if (cell.type == ET_ANEU) {
+                        NewAgentPT(cell.Xpt(), cell.Ypt()).Init(ET_PACC, cell.resistance);
                     } else {
-                        NewAgentPT(cell.Xpt(),cell.Ypt()).Init(SGM_PACC, cell.resistance);
+                        NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_PACC, cell.resistance);
                     }
-                } else if(r < eventProbabilitiesAneu[4]) {
+                } else if (r < eventProbabilitiesAneu[4]) {
                 }
-            } else if(((cell.type == ET_PACC)||(cell.type == SGM_PACC))&&(cell.CanDivide(PACC_DIV_BIAS,PACC_INHIB_WEIGHT))) {
+            } else if (((cell.type == ET_PACC) || (cell.type == SGM_PACC)) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
                 double[] eventsPACC = {depoly, nothing};
                 double[] eventPercentagesPACC = new double[eventsPACC.length];
                 double sum = depoly + nothing;
-                for(int i = 0; i < eventsPACC.length; i++) {
-                    eventPercentagesPACC[i] = (eventsPACC[i]/sum);
+                for (int i = 0; i < eventsPACC.length; i++) {
+                    eventPercentagesPACC[i] = (eventsPACC[i] / sum);
                 }
                 double[] eventProbabilitiesPACC = new double[eventsPACC.length];
                 eventProbabilitiesPACC[0] = eventPercentagesPACC[0];
-                for(int i = 1; i < eventsPACC.length; i++) {
-                    eventProbabilitiesPACC[i] = eventProbabilitiesPACC[i-1] + eventPercentagesPACC[i];
+                for (int i = 1; i < eventsPACC.length; i++) {
+                    eventProbabilitiesPACC[i] = eventProbabilitiesPACC[i - 1] + eventPercentagesPACC[i];
                 }
                 double r = rn.Double(1);
-                if(r < eventProbabilitiesPACC[0]) {
-                    if(cell.type == ET_PACC) {
+                if (r < eventProbabilitiesPACC[0]) {
+                    if (cell.type == ET_PACC) {
                         cell.Mutation();
                         cell.Die();
                         NewAgentPT(cell.Xpt(), cell.Ypt()).Init(ET_ANEU, cell.resistance);
                         double r1 = rn.Double(1);
-                        if(r1 < 0.25) {
-                            if(cell.Xpt() + 0.1 < xDim - 0.1) {
+                        if (r1 < 0.25) {
+                            if (cell.Xpt() + 0.1 < xDim - 0.1) {
                                 NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Ypt() + 0.1 < yDim - 0.1){
+                            } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
                                 NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Xpt() - 0.1 > xDim + 0.1){
+                            } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
                                 NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                            } else if(cell.Ypt() - 0.1 > yDim + 0.1) {
+                            } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
                                 NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(ET_ANEU, cell.resistance);
                             }
-                        } else if(r1 < .5) {
-                            if(cell.Ypt() - 0.1 > yDim + 0.1) {
-                                NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(ET_ANEU, cell.resistance);
-                            } else if(cell.Xpt() + 0.1 < xDim - 0.1) {
-                                NewAgentPT(cell.Xpt()+0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Ypt() + 0.1 < yDim - 0.1){
-                                NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Xpt() - 0.1 > xDim + 0.1){
-                                NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                        } else if (r1 < .5) {
+                            if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
                             }
-                        } else if(r1 < .75) {
-                            if (cell.Ypt() + 0.1 < yDim - 0.1){
-                                NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(ET_ANEU, cell.resistance);
-                            } else if(cell.Ypt() - 0.1 > yDim + 0.1) {
-                                NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(ET_ANEU, cell.resistance);
-                            } else if(cell.Xpt() + 0.1 < xDim - 0.1) {
-                                NewAgentPT(cell.Xpt()+0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Xpt() - 0.1 > xDim + 0.1){
-                                NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                        } else if (r1 < .75) {
+                            if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
                             }
                         } else {
-                            if(cell.Ypt() - 0.1 > yDim + 0.1) {
-                                NewAgentPT(cell.Xpt(), cell.Ypt()-0.1).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Ypt() + 0.1 < yDim - 0.1){
-                                NewAgentPT(cell.Xpt(), cell.Ypt()+0.1).Init(ET_ANEU, cell.resistance);
-                            }  else if(cell.Xpt() + 0.1 < xDim - 0.1) {
-                                NewAgentPT(cell.Xpt()+0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
-                            } else if (cell.Xpt() - 0.1 > xDim + 0.1){
-                                NewAgentPT(cell.Xpt()-0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                            if (cell.Ypt() - 0.1 > yDim + 0.1) {
+                                NewAgentPT(cell.Xpt(), cell.Ypt() - 0.1).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Ypt() + 0.1 < yDim - 0.1) {
+                                NewAgentPT(cell.Xpt(), cell.Ypt() + 0.1).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Xpt() + 0.1 < xDim - 0.1) {
+                                NewAgentPT(cell.Xpt() + 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
+                            } else if (cell.Xpt() - 0.1 > xDim + 0.1) {
+                                NewAgentPT(cell.Xpt() - 0.1, cell.Ypt()).Init(ET_ANEU, cell.resistance);
                             }
                         }
 
-                    } else if(cell.type == SGM_PACC) {
+                    } else if (cell.type == SGM_PACC) {
                         cell.Mutation();
-                        if(drugDose > 0) {
+                        if (drugDose > 0) {
                             if (cell.resistance > resistanceThreshold) {
                                 cell.Die();
                                 NewAgentPT(cell.Xpt(), cell.Ypt()).Init(SGM_ANEU, cell.resistance);
@@ -509,11 +495,6 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
                     }
                 }
             }
-        }
-        } catch (FileNotFoundException e){
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         RecordOutSize(out, out2);
     }
