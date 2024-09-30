@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HAL-master.iml" filepath="$PROJECT_DIR$/HAL-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../HAL-Library/HAL-Library.iml" filepath="$PROJECT_DIR$/../HAL-Library/HAL-Library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HIP-IMO-Research.iml" filepath="$PROJECT_DIR$/HIP-IMO-Research.iml" />
     </modules>
   </component>
 </project>
