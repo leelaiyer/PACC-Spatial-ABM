@@ -297,7 +297,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
         double obligate = Double.parseDouble(props.getProperty("obligate"));
         double facultativeParameter = Double.parseDouble(props.getProperty("facultative"));
         double depoly = Double.parseDouble(props.getProperty("depoly"));
-        double nothing = rn.Double(0.5);
+        double nothing = (1-logistic) * (1-obligate) * (1-facultativeParameter) * (1-depoly);
         double resistanceThreshold = Double.parseDouble(props.getProperty("resistanceThreshold"));
 
         for(CellFinal cell : this){
@@ -337,6 +337,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
                 } else if (r < eventProbabilitiesAneu[4]) {
                 }
             } else if (((cell.type == ET_PACC) || (cell.type == SGM_PACC)) && (cell.CanDivide(PACC_DIV_BIAS, PACC_INHIB_WEIGHT))) {
+                nothing = (1-depoly);
                 double[] eventsPACC = {depoly, nothing};
                 double[] eventPercentagesPACC = new double[eventsPACC.length];
                 double sum = depoly + nothing;
