@@ -9,308 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37384782-7327-413b-aab8-84b95e10cfe0" name="Changes" comment="Changed config file to come in from environment variable to write script">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/HAL_master_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/HAL_master_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/HalColorSchemes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/demo.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/ejml_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/junit_jupiter.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="37384782-7327-413b-aab8-84b95e10cfe0" name="Changes" comment="Reorganized files, added properties as environment variable">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrameworkPresentation.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Agent0D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Agent1DBase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Agent2DBase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Agent3DBase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentBase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentBaseSpatial.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentGrid0D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentGrid1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentGrid2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentGrid3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentPT1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentPT2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentPT3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentSQ1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentSQ1Dunstackable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentSQ2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentSQ2Dunstackable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentSQ3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/AgentSQ3Dunstackable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid1Ddouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid1Dint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid1Dlong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid1Dobject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid2Ddouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid2Dint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid2Dlong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid2Dobject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid3Ddouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid3Dint.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid3Dlong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/Grid3Dobject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/InternalGridAgentList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/KernelGrid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PDEGrid1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PDEGrid2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PDEGrid3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGrid1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGrid1DLong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGrid2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGrid2DLong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGrid3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGrid3DLong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGridBase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/PopulationGridLongBase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/SphericalAgent2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/GridsAndAgents/SphericalAgent3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/GifMaker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/GridWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/OpenGL2DWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/OpenGL3DWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/PlotLine.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/PlotPointInternal.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/PlotWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/TickTimer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIBoolInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIButton.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIComboBoxInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIDoubleInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIFileChooserInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIGrid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIGridView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIIntInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UILabel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIPlot.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIStringInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Gui/UIWindow.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentRadDispToAction1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentRadDispToAction2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentRadDispToAction3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentStepFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentToBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentToColorInt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentToInts.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/AgentToString.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ButtonAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ColorIntGenerator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords1DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords1DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords1DInt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords2DAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords2DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords2DColor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords2DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords2DInt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords2DSetArray.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords3DAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords3DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords3DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords3DInt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords3DSetArray.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Coords6DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/CustomSerialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DistToForceMap.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleArrayToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleArrayToVoid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleToAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleToColor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleToDoubles.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoubleToInt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Doubles2DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Doubles3DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DoublesToColor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/DrawFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GAMutantToString.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GAMutationFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GAScoreFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GenDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GetGenomeAttrs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GetMutationInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Grid1D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Grid2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Grid3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GridDiff2MultiThreadFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GuiCloseAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/GuiComp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ICoords2DAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ICoords3DAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexCoords2DAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexCoords2DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexCoords2DDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexCoords3DAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexCoords3DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexIntAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexIntToAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IndexLongAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IntDoubleToVoid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IntToBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IntToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IntToInt.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IntToVoid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/IsEntry1Before2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/KeyResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/LocalIndexAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/MenuItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ObjectToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/OdeSolution.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/OverlapForceResponse2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/OverlapForceResponse3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ParallelFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/ParamSetChangeAction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Point1DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Point2DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Point3DBool.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/RNG.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/SerializableModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/Sortable.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/SwapEntries.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Interfaces/VoidFunction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Rand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/BoolSet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/FileIO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/InteractiveModel/InteractiveModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/InteractiveModel/TreatableTumor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/ADIequations.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/Binomial.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/Gaussian.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/KeyRecorder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/PDEequations.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/ParamSet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/PopulationGridPDEequations.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/SplittableRN.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Internal/SweepRun.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Lenia/Coords1DDoubleArrToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Lenia/Coords2DDoubleToDouble.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Lenia/FFTGrid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Lenia/FFTbase.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Lenia/Lenia1Player.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Lenia/LeniaNPlayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Modularity/ModuleSetManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Modularity/VarSet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/Modularity/VarSetManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/MultiWellExperiment/DrawWell.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/MultiWellExperiment/MultiWellExperiment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/MultiWellExperiment/StepWell.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/MultinomialCalc.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/MultinomialCalcLong.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/ODESolver/Derivative.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/ODESolver/ODESolver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PY4J/DoublesDataFrame.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PY4J/Py4jModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PY4J/Py4jRunner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PhylogenyTracker/Genome.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PhylogenyTracker/GenomeFn.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PhylogenyTracker/GenomeLineageFn.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/PhylogenyTracker/PhylogenyTrackerInternal.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Tools/TdmaSolver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/Util.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-javadoc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-linux-arm32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-linux-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-linux.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-macos-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-macos.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-windows-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-windows-x86.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-natives-windows.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp-sources.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-assimp.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-javadoc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-linux-arm32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-linux-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-linux.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-macos-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-macos.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-windows-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-windows-x86.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-natives-windows.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw-sources.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-glfw.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-javadoc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-linux-arm32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-linux-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-linux.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-macos-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-macos.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-windows-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-windows-x86.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-natives-windows.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-javadoc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-linux-arm32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-linux-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-linux.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-macos-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-macos.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-windows-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-windows-x86.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-natives-windows.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal-sources.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-openal.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-javadoc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-linux-arm32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-linux-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-linux.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-macos-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-macos.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-windows-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-windows-x86.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-natives-windows.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl-sources.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-opengl.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-sources.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-javadoc.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-linux-arm32.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-linux-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-linux.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-macos-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-macos.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-windows-arm64.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-windows-x86.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-natives-windows.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb-sources.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl-stb.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HAL/lib/lwjgl.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HalColorSchemes.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/BirthDeath.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/BirthDeathOffLattice.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/Mover3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/MultiwellExample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/PopGrid.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/SaveLoadModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Agents/mover3DoffLattice.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Diffusibles/DiffusionAdvection3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Diffusibles/Gradient2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Diffusibles/Gradient3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Diffusibles/ReactionDiffusion2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/BinomialTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/ColorInterpolation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/ColorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/FileIOTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/GIFtest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/GuiExample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/HeatMaps.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/LineSegmentTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/LockExample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/NonSpatialABM.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/PNGexample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/PlotExample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/vis3Dtest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LEARN_HERE/Other/yCbCrTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/FinalSGMMutationStrategy.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/NonspatialTumor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/ProjectContinuation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/ProjectFirstDraft/FinalModelTumor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/ProjectFirstDraft/FirstModelTumor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project/ProjectFirstDraft/TumorWithSGMandET.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ABM/sources/ProjectContinuation.java" beforeDir="false" afterPath="$PROJECT_DIR$/ABM/sources/ProjectContinuation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -350,71 +51,75 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.BasicCellularAutomata.executor&quot;: &quot;Run&quot;,
-    &quot;Application.BirthDeathOffLattice.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ChemotaxisModel.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ColorBarGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DifferentSGMMutationStrategy.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DivisionDeathMutation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Example3D.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleGrid.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleModel.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleModelInteractive.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleOffLattice.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FinalModelTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FinalSGMMutationStrategy.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FirstModelTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FirstModelTumor2.executor&quot;: &quot;Run&quot;,
-    &quot;Application.GOLGrid.executor&quot;: &quot;Run&quot;,
-    &quot;Application.IntermittentTherapy.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MultiOutbreak.executor&quot;: &quot;Run&quot;,
-    &quot;Application.NonspatialTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.OffLatticePractice.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Orbium.executor&quot;: &quot;Run&quot;,
-    &quot;Application.OrbiumNPlayer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PDEexample.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PopTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ProjectContinuation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.StemCellCA.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TumorGrowth.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TumorWithETandSGM.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TumorWithSGMandET.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;JAR Application.HAL-master.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/leelaiyer/Desktop/HIP-IMO-Research&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.BasicCellularAutomata.executor": "Run",
+    "Application.BirthDeathOffLattice.executor": "Run",
+    "Application.ChemotaxisModel.executor": "Run",
+    "Application.ColorBarGenerator.executor": "Run",
+    "Application.DifferentSGMMutationStrategy.executor": "Run",
+    "Application.DivisionDeathMutation.executor": "Run",
+    "Application.Example3D.executor": "Run",
+    "Application.ExampleGrid.executor": "Run",
+    "Application.ExampleModel.executor": "Run",
+    "Application.ExampleModelInteractive.executor": "Run",
+    "Application.ExampleOffLattice.executor": "Run",
+    "Application.FinalModelTumor.executor": "Run",
+    "Application.FinalSGMMutationStrategy.executor": "Run",
+    "Application.FirstModelTumor.executor": "Run",
+    "Application.FirstModelTumor2.executor": "Run",
+    "Application.GOLGrid.executor": "Run",
+    "Application.IntermittentTherapy.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.MultiOutbreak.executor": "Run",
+    "Application.NonspatialTumor.executor": "Run",
+    "Application.OffLatticePractice.executor": "Run",
+    "Application.Orbium.executor": "Run",
+    "Application.OrbiumNPlayer.executor": "Run",
+    "Application.PDEexample.executor": "Run",
+    "Application.PopTumor.executor": "Run",
+    "Application.ProjectContinuation.executor": "Run",
+    "Application.StemCellCA.executor": "Run",
+    "Application.Test.executor": "Run",
+    "Application.TumorGrowth.executor": "Run",
+    "Application.TumorWithETandSGM.executor": "Run",
+    "Application.TumorWithSGMandET.executor": "Run",
+    "Application.sources.ProjectContinuation.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JAR Application.HAL-master.jar.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "create.test.in.the.same.root": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/leelaiyer/Desktop/HIP-IMO-Research",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="ProjectDraft" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ProjectContinuation">
+  <component name="RunManager" selected="Application.sources.ProjectContinuation">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <envs>
         <env name="propertiesFilePath" value="$PROJECT_DIR$/Project/config.properties" />
@@ -447,13 +152,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProjectContinuation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="sources.ProjectContinuation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-22 (2)" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <envs>
         <env name="propertiesFilePath" value="$PROJECT_DIR$/ABM/resources/config.properties" />
       </envs>
-      <option name="MAIN_CLASS_NAME" value="Model.ProjectContinuation" />
+      <option name="MAIN_CLASS_NAME" value="sources.ProjectContinuation" />
       <module name="HIP-IMO-Research" />
       <extension name="coverage">
         <pattern>
@@ -475,14 +180,14 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.ProjectContinuation" />
+      <item itemvalue="Application.sources.ProjectContinuation" />
       <item itemvalue="Application.ProjectContinuation (1)" />
       <item itemvalue="Application.Main" />
       <item itemvalue="JAR Application.HAL-master.jar" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ProjectContinuation" />
+        <item itemvalue="Application.sources.ProjectContinuation" />
         <item itemvalue="Application.ProjectContinuation (1)" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JAR Application.HAL-master.jar" />
@@ -513,7 +218,7 @@
       <workItem from="1727653292143" duration="188000" />
       <workItem from="1727734798802" duration="728000" />
       <workItem from="1727735534201" duration="7000" />
-      <workItem from="1727735978556" duration="731000" />
+      <workItem from="1727735978556" duration="3639000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed a couple naming issues and it's smoother now">
       <option name="closed" value="true" />
@@ -779,7 +484,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725798577271</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Reorganized files, added properties as environment variable">
+      <option name="closed" value="true" />
+      <created>1727736755746</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1727736755746</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Reorganized files, added properties as environment variable">
+      <option name="closed" value="true" />
+      <created>1727737102297</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1727737102297</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -831,7 +552,8 @@
     <MESSAGE value="Trying to write script with properties" />
     <MESSAGE value="Back to start with properties working, now I am going to work on making the properties file an argument for the command line" />
     <MESSAGE value="Changed config file to come in from environment variable to write script" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed config file to come in from environment variable to write script" />
+    <MESSAGE value="Reorganized files, added properties as environment variable" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reorganized files, added properties as environment variable" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

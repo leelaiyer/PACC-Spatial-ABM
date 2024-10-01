@@ -1,4 +1,4 @@
-package Model;
+package sources;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
 import HAL.GridsAndAgents.AgentGrid2D;
