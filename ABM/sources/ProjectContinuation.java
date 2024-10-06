@@ -179,7 +179,7 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
         int x = 30, y = 30;
 
         try {
-            String configFilePath = args[0]; //System.getenv("propertiesFilePath");
+            String configFilePath = System.getenv("propertiesFilePath");
             FileInputStream propsInput = new FileInputStream(configFilePath);
             Properties props = new Properties();
             props.load(propsInput);
