@@ -9,8 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="37384782-7327-413b-aab8-84b95e10cfe0" name="Changes" comment="Commit of config.properties file">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/HAL_master_jar.xml" beforeDir="false" />
+    <list default="true" id="37384782-7327-413b-aab8-84b95e10cfe0" name="Changes" comment="fixed nothing event">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ABM/sources/ProjectContinuation.java" beforeDir="false" afterPath="$PROJECT_DIR$/ABM/sources/ProjectContinuation.java" afterDir="false" />
     </list>
@@ -52,65 +51,66 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.BasicCellularAutomata.executor&quot;: &quot;Run&quot;,
-    &quot;Application.BirthDeathOffLattice.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ChemotaxisModel.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ColorBarGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DifferentSGMMutationStrategy.executor&quot;: &quot;Run&quot;,
-    &quot;Application.DivisionDeathMutation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Example3D.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleGrid.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleModel.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleModelInteractive.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ExampleOffLattice.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FinalModelTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FinalSGMMutationStrategy.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FirstModelTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.FirstModelTumor2.executor&quot;: &quot;Run&quot;,
-    &quot;Application.GOLGrid.executor&quot;: &quot;Run&quot;,
-    &quot;Application.IntermittentTherapy.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.MultiOutbreak.executor&quot;: &quot;Run&quot;,
-    &quot;Application.NonspatialTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.OffLatticePractice.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Orbium.executor&quot;: &quot;Run&quot;,
-    &quot;Application.OrbiumNPlayer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PDEexample.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PopTumor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ProjectContinuation (2).executor&quot;: &quot;Run&quot;,
-    &quot;Application.ProjectContinuation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.StemCellCA.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TumorGrowth.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TumorWithETandSGM.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TumorWithSGMandET.executor&quot;: &quot;Run&quot;,
-    &quot;Application.sources.ProjectContinuation.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;JAR Application.HAL-master.jar.executor&quot;: &quot;Run&quot;,
-    &quot;JAR Application.HIP-IMO-Research.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/leelaiyer/Desktop/HIP-IMO-Research&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ABM.sources.ProjectContinuation.executor": "Debug",
+    "Application.BasicCellularAutomata.executor": "Run",
+    "Application.BirthDeathOffLattice.executor": "Run",
+    "Application.ChemotaxisModel.executor": "Run",
+    "Application.ColorBarGenerator.executor": "Run",
+    "Application.DifferentSGMMutationStrategy.executor": "Run",
+    "Application.DivisionDeathMutation.executor": "Run",
+    "Application.Example3D.executor": "Run",
+    "Application.ExampleGrid.executor": "Run",
+    "Application.ExampleModel.executor": "Run",
+    "Application.ExampleModelInteractive.executor": "Run",
+    "Application.ExampleOffLattice.executor": "Run",
+    "Application.FinalModelTumor.executor": "Run",
+    "Application.FinalSGMMutationStrategy.executor": "Run",
+    "Application.FirstModelTumor.executor": "Run",
+    "Application.FirstModelTumor2.executor": "Run",
+    "Application.GOLGrid.executor": "Run",
+    "Application.IntermittentTherapy.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.MultiOutbreak.executor": "Run",
+    "Application.NonspatialTumor.executor": "Run",
+    "Application.OffLatticePractice.executor": "Run",
+    "Application.Orbium.executor": "Run",
+    "Application.OrbiumNPlayer.executor": "Run",
+    "Application.PDEexample.executor": "Run",
+    "Application.PopTumor.executor": "Run",
+    "Application.ProjectContinuation (2).executor": "Run",
+    "Application.ProjectContinuation.executor": "Run",
+    "Application.StemCellCA.executor": "Run",
+    "Application.Test.executor": "Run",
+    "Application.TumorGrowth.executor": "Run",
+    "Application.TumorWithETandSGM.executor": "Run",
+    "Application.TumorWithSGMandET.executor": "Run",
+    "Application.sources.ProjectContinuation.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JAR Application.HAL-master.jar.executor": "Run",
+    "JAR Application.HIP-IMO-Research.jar.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "create.test.in.the.same.root": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/leelaiyer/Desktop/HIP-IMO-Research",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -122,7 +122,24 @@
       <recent name="ProjectDraft" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ABM.sources.ProjectContinuation">
+    <configuration name="ABM.sources.ProjectContinuation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <envs>
+        <env name="propertiesFilePath" value="$PROJECT_DIR$/ABM/resources/config.properties" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="ABM.sources.ProjectContinuation" />
+      <module name="HIP-IMO-Research" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/ABM/resources/config.properties" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ABM.sources.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ProjectContinuation (2)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <envs>
         <env name="propertiesFilePath" value="$PROJECT_DIR$/ABM/resources/config.properties" />
@@ -178,8 +195,16 @@
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/HIP_IMO_Research_jar/HIP-IMO-Research.jar" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Application.ABM.sources.ProjectContinuation" />
+      <item itemvalue="Application.ProjectContinuation" />
+      <item itemvalue="Application.ProjectContinuation (2)" />
+      <item itemvalue="Application.sources.ProjectContinuation" />
+      <item itemvalue="JAR Application.HIP-IMO-Research.jar" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ABM.sources.ProjectContinuation" />
         <item itemvalue="Application.sources.ProjectContinuation" />
         <item itemvalue="Application.ProjectContinuation" />
         <item itemvalue="Application.ProjectContinuation (2)" />
@@ -215,6 +240,8 @@
       <workItem from="1727743568105" duration="79000" />
       <workItem from="1727778031648" duration="37000" />
       <workItem from="1727778071398" duration="1210000" />
+      <workItem from="1727791470237" duration="27000" />
+      <workItem from="1727809616768" duration="6569000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed a couple naming issues and it's smoother now">
       <option name="closed" value="true" />
@@ -520,7 +547,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727741619885</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="fixed nothing event">
+      <option name="closed" value="true" />
+      <created>1727791492188</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1727791492188</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -548,7 +583,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="New version" />
     <MESSAGE value="Fixed the problem with the PACCs dominating, and the problem where it kept crashing because the cells were out of bounds." />
     <MESSAGE value="I fixed the Div method to actually doing what I want it to, and mutations" />
     <MESSAGE value="Starting the SGM and ET hypothesis integrations" />
@@ -573,7 +607,8 @@
     <MESSAGE value="Reorganized files, added properties as environment variable" />
     <MESSAGE value="Added a README" />
     <MESSAGE value="Commit of config.properties file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commit of config.properties file" />
+    <MESSAGE value="fixed nothing event" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed nothing event" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

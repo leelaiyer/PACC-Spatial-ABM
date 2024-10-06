@@ -1,4 +1,4 @@
-package sources;
+package ABM.sources;
 
 import HAL.GridsAndAgents.SphericalAgent2D;
 import HAL.GridsAndAgents.AgentGrid2D;
@@ -174,10 +174,12 @@ public class ProjectContinuation extends AgentGrid2D<CellFinal> {
     }
 
     public static void main(String[] args) {
-        OpenGL2DWindow.MakeMacCompatible(args);
+        String[] args2 = new String[0];
+        OpenGL2DWindow.MakeMacCompatible(args2);
         int x = 30, y = 30;
+
         try {
-            String configFilePath = System.getenv("propertiesFilePath");
+            String configFilePath = args[0]; //System.getenv("propertiesFilePath");
             FileInputStream propsInput = new FileInputStream(configFilePath);
             Properties props = new Properties();
             props.load(propsInput);
