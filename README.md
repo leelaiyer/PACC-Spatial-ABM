@@ -4,7 +4,7 @@ The simulation is constructed with the Hybrid Automata Library (HAL) as a depend
 
 ## Table of Contents
 - [Installation](#installation)
-- [Adding HAL as a Module](#AddingHALasaModule)
+- [HAL](#HAL)
 - [Simulation](#simulation)
 - [Parameters](#parameters)
 - [Conclusion](#conclusion)
@@ -15,7 +15,7 @@ The simulation is constructed with the Hybrid Automata Library (HAL) as a depend
 3. Add HAL as a module to the project
 4. The code for the model is housed in the sources package, titled "ProjectContinuation"
 
-## Adding HAL as a Module
+## HAL
 
 ## Simulation
 Like I mentioned above, in the simulation, there are two different evolutionary strategies. The first is called evolutionary triage (ET) and the second is called self-genetic modification (SGM). If you would like to learn more about these strategies, please refer to this paper: [insert link to paper]. 
