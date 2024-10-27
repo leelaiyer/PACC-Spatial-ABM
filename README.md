@@ -6,7 +6,6 @@ The simulation is constructed with the Hybrid Automata Library (HAL) as a depend
 - [Installation](#installation)
 - [Simulation](#simulation)
 - [Parameters](#parameters)
-- [Conclusion](#conclusion)
 
 ## Installation
 1. Clone the repo using web URL
